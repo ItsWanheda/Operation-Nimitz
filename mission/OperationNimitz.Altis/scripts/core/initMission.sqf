@@ -188,7 +188,8 @@ ON_fnc_validateSetup = {
     private _errors = [];
     private _aircraft = missionNamespace getVariable ["ON_playerAircraft", objNull];
     private _carrier = missionNamespace getVariable ["ON_carrier", objNull];
-    private _marker = missionNamespace getVariable ["ON_capMarker", "ON_mrk_CAP"];
+    private _marker = missionNamespace getVariable ["ON_casAreaMarker", "ON_mrk_CAS"];
+    private _targetMarker = missionNamespace getVariable ["ON_casTargetMarker", "ON_mrk_CAS_TARGET"];
 
     if (isNull _aircraft) then {
         _errors pushBack "Required object ON_playerAircraft is missing.";
@@ -197,7 +198,10 @@ ON_fnc_validateSetup = {
         _errors pushBack "Required object ON_carrier is missing.";
     };
     if !(_marker in allMapMarkers) then {
-        _errors pushBack format ["Required CAP marker %1 is missing.", _marker];
+        _errors pushBack format ["Required CAS area marker %1 is missing.", _marker];
+    };
+    if !(_targetMarker in allMapMarkers) then {
+        _errors pushBack format ["Required CAS target marker %1 is missing.", _targetMarker];
     };
 
     missionNamespace setVariable ["ON_setupErrors", _errors];
