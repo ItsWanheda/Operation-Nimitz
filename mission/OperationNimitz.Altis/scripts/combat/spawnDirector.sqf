@@ -198,17 +198,24 @@ private _convoyRecords = [];
             if (!isNull _vehicle) then {
                 _vehicle setDir (markerDir _spawnMarker);
                 createVehicleCrew _vehicle;
-                (crew _vehicle) joinSilent _convoyGroup;
-                _vehicle setVariable ["ON_convoyId", _convoyId, true];
-                _vehicle setVariable ["ON_assetClassKey", _classKeys select _vehicleIndex, true];
-                _vehicle setVariable ["ON_assetSpawnMarker", _spawnMarker, true];
-                _vehicle setVariable [
-                    "ON_convoyRole",
-                    if (_escortCount > 0 && { _vehicleIndex >= _escortStartIndex }) then { "ESCORT" } else { "TRANSPORT" },
-                    true
-                ];
-                _convoyVehicles pushBack _vehicle;
-                _spawnedAssets pushBack _vehicle;
+                private _vehicleCrew = crew _vehicle;
+
+                if (_vehicleCrew isEqualTo []) then {
+                    deleteVehicle _vehicle;
+                    [format ["Convoy '%1' vehicle at marker '%2' has no crew. Verify that the selected classname is crewable.", _convoyId, _spawnMarker]] call ON_fnc_log;
+                } else {
+                    _vehicleCrew joinSilent _convoyGroup;
+                    _vehicle setVariable ["ON_convoyId", _convoyId, true];
+                    _vehicle setVariable ["ON_assetClassKey", _classKeys select _vehicleIndex, true];
+                    _vehicle setVariable ["ON_assetSpawnMarker", _spawnMarker, true];
+                    _vehicle setVariable [
+                        "ON_convoyRole",
+                        if (_escortCount > 0 && { _vehicleIndex >= _escortStartIndex }) then { "ESCORT" } else { "TRANSPORT" },
+                        true
+                    ];
+                    _convoyVehicles pushBack _vehicle;
+                    _spawnedAssets pushBack _vehicle;
+                };
             };
         } forEach _resolvedClasses;
 
