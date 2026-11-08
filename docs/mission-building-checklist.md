@@ -39,7 +39,7 @@ Do not mark a dependency, classname, capability, or procedure complete merely be
 
 ### 1.2 Mission design decisions to document
 
-- [ ] Write a one-paragraph operational situation: friendly force posture, why the carrier is operating near Altis, the CAP objective, and what event starts the mission.
+- [ ] Write a one-paragraph operational situation: friendly force posture, why the carrier is operating near Altis, the CAS objective, and what event starts the mission.
 - [ ] Define the patrol area, station altitude, speed guidance, time on station, weather, visibility, wind, and time of day.
 - [ ] Define the operational boundaries and keep-out areas.
 - [ ] Define rules of engagement (ROE), identification requirements, escalation authority, abort criteria, and weapons-release conditions.
@@ -291,7 +291,7 @@ Once the USS Nimitz asset is selected:
 ### 9.1 AI wingman
 
 - [ ] Establish a reliable join-up after launch.
-- [ ] Define formation and station-keeping behavior for transit and CAP.
+- [ ] Define formation and station-keeping behavior for transit and CAS.
 - [ ] Test altitude, speed, waypoint, formation, and combat behavior under the chosen AI skill settings.
 - [ ] Define radio acknowledgements for join-up, station, contact, engagement authorization, disengagement, and RTB.
 - [ ] Add a recovery path for wingman separation or stuck AI.
@@ -326,9 +326,9 @@ Once the USS Nimitz asset is selected:
 
 ## 10. CAS tasking and hostile-contact flow
 
-### 10.1 CAP station
+### 10.1 CAS station
 
-- [ ] Define CAP station coordinates, altitude band, speed guidance, heading, and patrol area.
+- [ ] Define CAS station coordinates, altitude band, speed guidance, heading, and patrol area.
 - [ ] Define the station-entry condition and how the player knows they are on station.
 - [ ] Decide whether patrol is a timed orbit, a player-managed area, or a scripted route.
 - [ ] Ensure the player can leave station for an authorized intercept and return to the patrol area.
@@ -368,7 +368,7 @@ Once the USS Nimitz asset is selected:
 ### 11.1 Return to base (RTB)
 
 - [ ] Define the RTB trigger conditions and who authorizes the return.
-- [ ] Provide a route from CAP station to carrier recovery area.
+- [ ] Provide a route from CAS station to carrier recovery area.
 - [ ] Provide fuel state, expected recovery time, weather, wind, carrier position, and recovery instructions.
 - [ ] Handle early RTB due to damage, low fuel, weather, or mission abort.
 - [ ] Confirm the carrier remains in a suitable and reachable recovery configuration.
@@ -444,7 +444,7 @@ The architecture below is a design guide. Validate command availability, localit
 ### 13.1 Trigger and phase design
 
 - [ ] Use named, documented triggers or scripted conditions for mission-phase transitions.
-- [ ] Define explicit phase states, for example: briefing, preflight, startup, taxi, launch, join-up, CAP, intercept, RTB, recovery, debrief.
+- [ ] Define explicit phase states, for example: briefing, preflight, startup, taxi, launch, join-up, CAS, intercept, RTB, recovery, debrief.
 - [ ] Define exactly which event advances each phase.
 - [ ] Ensure each phase transition can occur only once unless a repeat is intentional.
 - [ ] Add timeouts and player-visible recovery instructions for phases that can fail.
@@ -455,7 +455,7 @@ The architecture below is a design guide. Validate command availability, localit
 
 - [ ] Create a briefing task before the player leaves the ready room.
 - [ ] Add flight preparation and launch objectives appropriate to the full-MILSIM flow.
-- [ ] Add CAP station tasking and any contact/intercept task dynamically as the sortie progresses.
+- [ ] Add CAS station tasking and any contact/intercept task dynamically as the sortie progresses.
 - [ ] Update task states in a consistent order and provide concise player feedback.
 - [ ] Define optional objectives separately from mandatory objectives.
 - [ ] Ensure tasks have meaningful completion, failure, cancellation, and timeout behavior.
@@ -492,7 +492,7 @@ Run tests in small increments. Do not build the complete sortie before the carri
 - [ ] Interrupted or failed startup is handled safely.
 - [ ] Taxi and catapult launch are repeatable.
 - [ ] Wingman can join and hold the intended formation.
-- [ ] CAP station detection and objective progression work.
+- [ ] CAS station detection and objective progression work.
 - [ ] AWACS/contact messages match mission state.
 - [ ] Intercept and ROE branches work as designed.
 - [ ] RTB, recovery, wave-off/bolter or fallback paths work.
@@ -534,7 +534,7 @@ Work through the phases in order. A later phase should not be treated as complet
 | 2 — Carrier and player foundation | Place carrier, player start, ready room route, aircraft, and wingman | Player can move to and enter the correct F/A-18F; no critical geometry/spawn issues |
 | 3 — Flight-deck procedures | Implement and test preflight, startup, taxi, launch, and join-up | Full launch sequence is repeatable or a documented alternative is approved |
 | 4 — Mission framework | Implement initialization, phase state, tasks, triggers, communications, and briefing | Mission phases advance once and recover cleanly from expected failures |
-| 5 — CAP and supporting AI | Implement wingman, CAP station, AWACS/ATC messages, and tanker only if verified | Patrol and support flow works in single-player |
+| 5 — CAS and supporting AI | Implement wingman, CAS station, AWACS/ATC messages, and tanker only if verified | Patrol and support flow works in single-player |
 | 6 — Contact scenario | Add AFR contact, identification, ROE, intercept, and outcomes | Contact branches are consistent, fair, and ROE-compliant |
 | 7 — Recovery and debrief | Implement RTB, carrier recovery, shutdown, and final report | Successful recovery and defined fallback paths work |
 | 8 — Hardening | Run regression, performance, clean-restart, and full-sortie tests | No known critical errors; release criteria are met |
@@ -569,9 +569,9 @@ The first sortie is ready for release only when all mandatory criteria below pas
 - [ ] JOKER 1-2 can join and support the player, or a documented fallback is provided.
 - [ ] The player receives accurate and consistent briefing, flight, and support communications.
 
-### CAP and mission logic
+### CAS and mission logic
 
-- [ ] The CAP station and tasking work reliably.
+- [ ] The CAS station and tasking work reliably.
 - [ ] Hostile contacts are identifiable through the designed mission flow.
 - [ ] ROE prevents unauthorized scripted engagement.
 - [ ] Contact outcomes and objective status remain consistent across all tested branches.
