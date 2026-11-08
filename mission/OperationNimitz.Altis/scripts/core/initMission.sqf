@@ -4,7 +4,7 @@
 */
 waitUntil { time > 0 && { !isNull player } };
 
-missionNamespace setVariable ["ON_version", "0.4.0-dev"];
+missionNamespace setVariable ["ON_version", "0.5.0-dev"];
 missionNamespace setVariable ["ON_phase", "BRIEFING"];
 missionNamespace setVariable ["ON_missionResult", "UNSET"];
 missionNamespace setVariable ["ON_terminalPhase", "BRIEFING"];
@@ -236,4 +236,4 @@ call compile preprocessFileLineNumbers "scripts\combat\spawnDirector.sqf";
 [] execVM "scripts\core\telemetry.sqf";
 
 [] call ON_fnc_validateSetup;
-["Mission framework 0.3.0-dev initialized."] call ON_fnc_recordEvent;
+["Mission framework 0.5.0-dev initialized."] call ON_fnc_recordEvent;
