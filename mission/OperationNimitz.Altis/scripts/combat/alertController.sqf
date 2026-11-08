@@ -21,7 +21,12 @@ private _enemySide = missionNamespace getVariable ["ON_enemySide", east];
 private _suspiciousThreshold = _settings getOrDefault ["suspiciousKnowledge", 1.5];
 private _alertedThreshold = _settings getOrDefault ["alertedKnowledge", 2.5];
 private _engagedThreshold = _settings getOrDefault ["engagedKnowledge", 3.5];
-private _scanInterval = (_settings getOrDefault ["scanInterval", 5]) max 1;
+private _configuredScanInterval = _settings getOrDefault ["scanInterval", 5];
+private _scanInterval = if (_configuredScanInterval isEqualType 0) then { _configuredScanInterval max 1 } else { 5 };
+
+if !(_configuredScanInterval isEqualType 0) then {
+    ["Invalid enemy alert scanInterval; default 5 seconds restored."] call ON_fnc_log;
+};
 
 private _thresholdsValid = (
     _suspiciousThreshold isEqualType 0
