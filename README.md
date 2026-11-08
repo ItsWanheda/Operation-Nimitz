@@ -27,6 +27,7 @@ The repository contains the initial SQF mission framework, currently at **0.3.0-
 ## Mission framework
 
 - [Mission Framework](docs/mission-framework.md) — architecture, configuration, editor references, implemented behavior, and limitations.
+- [Manual Asset and Classname Configuration](docs/asset-classname-config.md) — one place to enter every mod classname and configure marker-based deployments.
 - [Eden Setup and Test Guide](docs/testing-guide.md) — setup steps, first-preview checks, and regression scenarios.
 - [Mission Building Checklist](docs/mission-building-checklist.md) — dependency verification, asset selection, implementation phases, and acceptance criteria.
 
