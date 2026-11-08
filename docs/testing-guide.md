@@ -1,6 +1,6 @@
 # Operation Nimitz — Eden Setup and Test Guide
 
-This guide covers the 0.5.0-dev SQF mission framework, manual classname deployment, and tactical force packages.
+This guide covers the 0.6.0-dev SQF mission framework, manual classname deployment, tactical force packages, enemy alert escalation, reinforcement waves, operational command requests, and advanced convoy behavior.
 
 ## Before opening the mission
 
@@ -29,9 +29,19 @@ Every enemy deployment row should have its own marker and keep `requireUniqueMar
 - Confirm every infantry/vehicle deployment appears at its intended marker and on the intended side.
 - Confirm each enemy spawn is at a unique marker.
 - Confirm all convoy vehicles start at their assigned route markers and follow the ordered route.
+- Confirm the last configured escortCount vehicles receive the ESCORT role tag and the remaining vehicles receive the TRANSPORT role tag.
+- Confirm checkpoint waypoints pause for the configured duration.
+- Test CONTINUE, HALT_ON_DAMAGE and HALT_ON_LOSS convoy reactions with controlled vehicle damage/destruction.
+- Confirm convoy command reports show the correct vehicle count, status and reaction mode.
+- Confirm aircraft command actions report SITREP, threat, reinforcements, convoy status, and phase-based tasking.
 - Confirm GARRISON packages spawn once and remain assigned to their configured position.
 - Confirm PATROL packages spawn once and cycle through their configured route markers.
 - Confirm QRF packages do not spawn before the player enters the activation radius, then spawn at their separate spawn marker and follow their route.
+- Confirm enemy alert state begins at QUIET and escalates from AI `knowsAbout` values when enemy AI detects the player.
+- Confirm optional alert zones trigger only at their configured marker/radius and requested minimum level.
+- Confirm reinforcement schedules remain on standby until their selected ALERT_LEVEL, PHASE, or PLAYER_RADIUS trigger is met.
+- Confirm initial delay, maximum wave count, interval, and per-wave spawn offsets are respected.
+- Confirm an invalid reinforcement classname or route marker prevents that wave from producing a partial group.
 - Confirm missing force-package classnames, spawn markers, activation markers, and waypoint markers are logged and do not create partial groups.
 - Confirm the diary contains Mission, Situation, Rules of Engagement, and Communications.
 - Complete preflight, startup, taxi and launch using the actual aircraft-mod procedures.
@@ -58,6 +68,10 @@ Check the RPT for undefined variables, missing assets, invalid classnames, faile
 - Empty classname field, invalid classname and missing marker.
 - Duplicate enemy spawn marker and duplicate convoy route marker.
 - Force-package GARRISON/PATROL/QRF behavior, invalid class key, missing marker, and incomplete waypoint list.
+- Enemy alert knowledge thresholds, alert-zone validation, repeated state escalation, and disabled-controller behavior.
+- Reinforcement trigger modes, initial delay, multi-wave scheduling, spawn spacing, invalid PLAYER_RADIUS marker/radius, and mission termination mid-schedule.
+- Command actions when aircraft, convoys, reinforcement definitions, or support references are absent.
+- Convoy role tagging, checkpoint membership validation, pause duration, invalid reaction/speed/behaviour values, damage threshold boundaries, and partial-spawn cleanup.
 - Wrong asset type entered into a UNIT row or VEHICLE row.
 - Crew-enabled and empty vehicles; faction-correct crew verification.
 - Wingman pilot missing, pilot unable to enter aircraft, and aircraft missing.
