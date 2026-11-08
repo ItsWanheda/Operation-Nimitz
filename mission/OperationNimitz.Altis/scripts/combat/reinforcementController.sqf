@@ -47,7 +47,7 @@ ON_fnc_reinforcementAlertRank = {
         ["_spawnMarker", "", [""]],
         ["_waypointMarkers", [], [[]]],
         ["_triggerType", "", [""]],
-        ["_triggerValue", "", [""]],
+        ["_triggerValue", ""],
         ["_initialDelay", 0, [0]],
         ["_maxWaves", 1, [0]],
         ["_waveInterval", 60, [0]]
@@ -91,7 +91,7 @@ ON_fnc_reinforcementAlertRank = {
                         ["_reinforcementSpawnMarker", "", [""]],
                         ["_reinforcementWaypoints", [], [[]]],
                         ["_reinforcementTriggerType", "", [""]],
-                        ["_reinforcementTriggerValue", "", [""]],
+                        ["_reinforcementTriggerValue", ""],
                         ["_reinforcementInitialDelay", 0, [0]],
                         ["_reinforcementMaxWaves", 1, [0]],
                         ["_reinforcementWaveInterval", 60, [0]]
