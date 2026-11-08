@@ -41,7 +41,7 @@ ON_fnc_createTask = {
         ["_taskId", "", [""]],
         ["_title", "", [""]],
         ["_description", "", [""]],
-        ["_destination", objNull, [objNull, ""]]
+        ["_destination", objNull]
     ];
     if (_taskId isEqualTo "") exitWith { ["Rejected task with empty ID."] call ON_fnc_log; };
     [
