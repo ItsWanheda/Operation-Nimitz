@@ -9,7 +9,7 @@ This milestone provides the mission flow and a generic classname-driven deployme
 ## Implemented systems
 
 - Mission bootstrap, shared phase validation, task helpers, diagnostic logging, and setup checks.
-- Central manual classname map and marker-driven spawner for individual units, vehicles, aircraft, carriers and static weapons.
+- Central manual classname map (including the playable player-unit classname check) and marker-driven spawner for individual units, vehicles, aircraft, carriers and static weapons.
 - Optional native vehicle crew creation and separately configured pilot seating.
 - Marker-unique deployment checks for individual assets.
 - Convoy spawning through classname keys and ordered, unique route-marker lists.
