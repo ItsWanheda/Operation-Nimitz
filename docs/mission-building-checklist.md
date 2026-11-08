@@ -127,11 +127,13 @@ Create only the directories and files needed by the chosen implementation. Confi
 
 | Asset | Workshop ID | Current status | Required verification |
 |---|---:|---|---|
-| F/A-18E Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, exact E-variant vehicle classname, cockpit/startup behavior, flight model, pylons, weapons, animations, sounds, and carrier compatibility |
-| USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, required units, factions, equipment, exact classnames, and compatibility with the selected mission mod set |
-| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) — USS Nimitz (Rory / TeTeTe3) | Identified; **installation and compatibility not verified** | Verify availability/installability, CBA_A3 dependency, carrier object classname, deck features, launch/recovery support, and compatibility with the F/A-18E mod |
+| F/A-18E/F Super Hornet 2020 (project target: single-seat F/A-18E) | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Owner-supplied reference; Steam currently displays removed/incompatible notices; **installation and E-variant verification pending** | Installed version, prerequisites, exact single-seat E classname, cockpit/startup behavior, flight model, pylons, weapons, animations, sounds, and carrier compatibility |
+| USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Owner-supplied reference; **installed content and compatibility not verified** | Installed version, prerequisites, required units, factions, equipment, exact classnames, and compatibility with the selected mission mod set |
+| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) — USS Nimitz (Rory / TeTeTe3) | Owner-supplied candidate; Steam currently displays removed/incompatible notices; **installation and compatibility not verified** | Verify availability/installability, CBA_A3 dependency, carrier object classname, deck features, launch/recovery support, and compatibility with the F/A-18E mod |
 
-**Important:** The Workshop item is now identified, but it is not yet a verified mission dependency. The Steam listing currently displays a removed-from-community notice and an ARMA 3 incompatibility warning. Its description identifies the carrier as a static, non-pilotable structure and advertises a walkable deck, four steam catapults, arresting gear, IFLOLS, hangar, elevators, and a briefing room. Treat those as **publisher-described features, not in-game test results**. The listing also names **CBA_A3** as a required item. Confirm that the item can be installed and loaded with the current game/mod set before depending on it.
+**Important — Workshop status checked 2026-11-08:** The USS Nimitz item is an identified project-supplied candidate, not a verified mission dependency. Steam currently displays removed-from-community and ARMA 3 incompatibility notices on both the USS Nimitz and F/A-18E/F Super Hornet 2020 pages. These are page-level warnings; they do not prove that an already-subscribed local copy cannot load. However, installation and compatibility remain blockers until the exact local mod preset launches and each asset passes an isolated Eden test. The aircraft listing's title includes both E and F variants, so the project must still prove that the single-seat F/A-18E is available and usable.
+
+The USS Nimitz listing describes the carrier as a static, non-pilotable structure and advertises a walkable deck, four steam catapults, arresting gear, IFLOLS, hangar, elevators, and a briefing room. Treat those as **publisher-described features, not in-game test results**. The listing names **CBA_A3** as a required item. Confirm that the carrier and dependency can be installed and loaded with the current game/mod set before depending on them. The USMC 2026 item remains an owner-supplied reference; its installed contents, dependencies, classnames, and compatibility are pending verification.
 
 ### 4.2 Dependency verification checklist
 
@@ -153,7 +155,7 @@ For every required mod:
 
 ### 4.3 Aircraft-specific verification
 
-- [ ] Verify that the installed asset is specifically the **F/A-18E**, not the F/A-18F two-seat variant.
+- [ ] Verify that the installed F/A-18E/F 2020 item actually exposes the **single-seat F/A-18E** required by this project; do not select or document the two-seat F/A-18F as the player aircraft.
 - [ ] Record the exact aircraft classname only after in-game verification.
 - [ ] Confirm the cockpit is usable in the player seat and check required interaction/action controls.
 - [ ] Verify startup, engine state, avionics, lights, canopy, control surfaces, and landing gear behavior actually available in this mod.
