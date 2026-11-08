@@ -19,7 +19,8 @@ missionNamespace setVariable ["ON_casAreaRadius", missionNamespace getVariable [
 missionNamespace setVariable ["ON_casTargetRadius", missionNamespace getVariable ["ON_casTargetRadius", 500]];
 missionNamespace setVariable ["ON_casTimeRequired", missionNamespace getVariable ["ON_casTimeRequired", 60]];
 missionNamespace setVariable ["ON_enemySide", missionNamespace getVariable ["ON_enemySide", east]];
-missionNamespace setVariable ["ON_enemySpawnDefinitions", missionNamespace getVariable ["ON_enemySpawnDefinitions", []]];
+missionNamespace setVariable ["ON_assetClassnames", missionNamespace getVariable ["ON_assetClassnames", createHashMap]];
+missionNamespace setVariable ["ON_assetDeployments", missionNamespace getVariable ["ON_assetDeployments", []]];
 missionNamespace setVariable ["ON_convoyDefinitions", missionNamespace getVariable ["ON_convoyDefinitions", []]];
 missionNamespace setVariable ["ON_metricCasTime", 0];
 missionNamespace setVariable ["ON_capRadius", 1200];
