@@ -18,9 +18,11 @@ The repository is initialized. Mission requirements, dependency references, asse
 
 | Dependency | Workshop ID | Status |
 |---|---:|---|
-| F/A-18E Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified; exact classnames and capabilities pending in-game verification |
-| USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified; required assets and classnames pending in-game verification |
-| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) | Identified; Steam listing currently shows removed/incompatible notices; installability and compatibility pending verification |
+| F/A-18E/F Super Hornet 2020 (project target: single-seat F/A-18E) | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Owner-supplied reference; Steam currently displays removed/incompatible notices; installability, E-variant classname and capabilities pending in-game verification |
+| USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Owner-supplied reference; installed content, dependencies, classnames and compatibility pending in-game verification |
+| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) | Owner-supplied candidate; Steam currently displays removed/incompatible notices; installation, CBA_A3 dependency and compatibility pending verification |
+
+> **Workshop status checked 2026-11-08:** Steam's pages for the F/A-18E/F Super Hornet 2020 and USS Nimitz currently display removed-from-community and incompatible-with-Arma-3 notices. These are page-level warnings, not proof that an already-subscribed local copy cannot load; test the exact installed mod preset in ARMA 3 before treating either item as usable. The USMC 2026 item remains an owner-supplied reference; its installed contents and compatibility are unverified.
 
 ## Development approach
 
