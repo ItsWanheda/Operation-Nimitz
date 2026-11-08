@@ -1,6 +1,11 @@
 /*
     Operation Nimitz mission bootstrap.
-    This is a single-player mission. The framework expects editor-placed objects
-    to be assigned the variable names documented in docs/mission-framework.md.
+
+    All mod classnames and spawn placements are configured in:
+      config/assetConfig.sqf
+
+    Keep that configuration before mission initialization so spawned object
+    references (ON_carrier, ON_playerAircraft, etc.) exist before setup checks.
 */
+call compile preprocessFileLineNumbers "config\\assetConfig.sqf";
 [] execVM "scripts\\core\\initMission.sqf";
