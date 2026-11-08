@@ -72,15 +72,16 @@ _aircraft addAction [
             ["JOKER 1-1", "Launch report requires the assigned aircraft to be airborne above 50 metres."] call ON_fnc_message;
         };
 
-        private _marker = missionNamespace getVariable ["ON_capMarker", "ON_mrk_CAP"];
-        if !(_marker in allMapMarkers) exitWith {
-            ["NIMITZ", "CAP marker is missing. RTB progression is blocked until mission setup is corrected."] call ON_fnc_message;
+        private _marker = missionNamespace getVariable ["ON_casAreaMarker", "ON_mrk_CAS"];
+        private _targetMarker = missionNamespace getVariable ["ON_casTargetMarker", "ON_mrk_CAS_TARGET"];
+        if !(_marker in allMapMarkers && { _targetMarker in allMapMarkers }) exitWith {
+            ["NIMITZ", "CAS area or target marker is missing. Flight progression is blocked until mission setup is corrected."] call ON_fnc_message;
         };
 
         ["ON_task_taxi", "SUCCEEDED"] call ON_fnc_setTaskState;
         ["IN_FLIGHT"] call ON_fnc_setPhase;
-        ["ON_task_cap", "Join JOKER 1-2 if available and proceed to the designated CAP station. Hold the station for the required period and resolve any scripted contact.", getMarkerPos _marker] call ON_fnc_createTask;
-        ["NIMITZ", "Launch confirmed. JOKER 1-1, proceed to the CAP station."] call ON_fnc_message;
+        ["ON_task_cas", "Join JOKER 1-2 if available and proceed to the assigned close air support area. Identify targets, apply ROE, and assess effects before reporting the area clear.", getMarkerPos _marker] call ON_fnc_createTask;
+        ["NIMITZ", "Launch confirmed. JOKER 1-1, proceed to the assigned CAS area."] call ON_fnc_message;
 
         [] execVM "scripts\ai\wingmanController.sqf";
         [] execVM "scripts\flight\capFlow.sqf";
