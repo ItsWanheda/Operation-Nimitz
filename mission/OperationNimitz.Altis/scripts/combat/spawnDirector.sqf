@@ -112,7 +112,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
                 _waypoint setWaypointSpeed "LIMITED";
                 _waypoint setWaypointBehaviour "SAFE";
                 _waypoint setWaypointCompletionRadius 20;
-            } forEach _validRoute;
+            } forEach (_validRoute select [1]);
             private _cycle = _convoyGroup addWaypoint [getMarkerPos (_validRoute select 0), 0];
             _cycle setWaypointType "CYCLE";
             _convoyGroup setBehaviour "SAFE";
