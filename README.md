@@ -6,11 +6,13 @@ A single-player, full-MILSIM ARMA 3 naval aviation mission project.
 
 The player flies as **JOKER 1-1**, a VFA-103 Jolly Rogers F/A-18E Super Hornet pilot operating from a carrier in the Altis theatre. AI-controlled elements provide wingman and supporting-aircraft roles.
 
-The intended first sortie is a Combat Air Patrol (CAP): ready-room briefing, flight-deck preparation, startup and launch, patrol station, airborne tasking and contact handling, carrier recovery, and post-flight debrief.
+The intended first sortie is a Combat Air Patrol (CAP): ready-room briefing, flight-deck preparation, startup and launch, patrol station, scripted contact handling, carrier recovery, and post-flight debrief.
 
 ## Project status
 
-The repository is initialized. Mission requirements, dependency references, asset/classname verification, implementation phases, and acceptance criteria are tracked in the [mission-building checklist](docs/mission-building-checklist.md).
+The repository contains the initial SQF mission framework, currently at **0.2.0-dev** on the feature branch. Implemented mission logic includes phase-gated flight progression, AI wingman follow/hold-fire behavior, CAP timing with contact-resolution gating, player-confirmed contact identification and ROE, optional scripted support status calls, sampled sortie telemetry, setup validation, and a debrief summary.
+
+**This is not yet a playable/exported mission.** An Eden-generated mission.sqm, verified editor assets/classnames, and in-game RPT testing are still required.
 
 > **Verification rule:** Do not assume Workshop assets, classnames, mod features, carrier procedures, or compatibility. Record them as pending confirmation until tested in the installed ARMA 3 environment.
 
@@ -22,12 +24,14 @@ The repository is initialized. Mission requirements, dependency references, asse
 | USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified; required assets and classnames pending in-game verification |
 | USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) | Identified; Steam listing currently shows removed/incompatible notices; installability and compatibility pending verification |
 
-## Mission framework status
+## Mission framework
 
-The first SQF foundation is under development on [`feat/mission-system-foundation`](https://github.com/ItsWanheda/Operation-Nimitz/tree/feat/mission-system-foundation). It includes the initial briefing, mission phase/task helpers, player-confirmed flight-deck gates, basic AI wingman join-up order, CAP station timer, recovery check, contact-state scaffold, and debrief. It is **not yet a playable/exported mission**: an Eden-generated `mission.sqm`, verified editor assets/classnames, and in-game testing are still required. See [Mission Framework Foundation](docs/mission-framework.md).
+- [Mission Framework](docs/mission-framework.md) — architecture, configuration, editor references, implemented behavior, and limitations.
+- [Eden Setup and Test Guide](docs/testing-guide.md) — setup steps, first-preview checks, and regression scenarios.
+- [Mission Building Checklist](docs/mission-building-checklist.md) — dependency verification, asset selection, implementation phases, and acceptance criteria.
+
+Mission source lives in mission/OperationNimitz.Altis. Development continues on the existing feat/mission-system-foundation branch; main is not modified.
 
 ## Development approach
 
-Mission work will be developed incrementally in Eden Editor with modular SQF, explicit task/trigger flow, and repeatable single-player testing. Changes should be developed on feature branches and reviewed before integration.
-
-Start with the [mission-building checklist](docs/mission-building-checklist.md) for prerequisites, dependency verification, implementation order, testing, and release acceptance criteria.
+Mission work is developed incrementally in Eden Editor with modular SQF and repeatable single-player testing. Classnames, mod capabilities, and carrier-specific procedures must be verified from the installed dependencies before they are integrated into the scenario.
