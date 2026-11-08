@@ -4,11 +4,11 @@ This guide covers the current 0.2.0-dev SQF framework. It does not replace the d
 
 ## Before opening the mission
 
-1. Install and confirm the F/A-18E Super Hornet 2020 dependency.
+1. Install and confirm the F/A-18F Super Hornet 2020 dependency.
 2. Confirm whether the USS Nimitz Workshop item can currently be installed and loaded. Do not substitute an unverified carrier.
 3. Confirm the USMC 2026 and any chosen AFR/support assets load in the editor.
 4. Create an Altis mission named OperationNimitz.Altis and copy the repository's mission-folder scripts into it.
-5. Place the player, assigned F/A-18E, carrier, and CAP marker. Use the exact variable names in mission-framework.md.
+5. Place the player, assigned F/A-18F, carrier, and CAS area marker. Use the exact variable names in mission-framework.md.
 6. Place the AI wingman pilot inside its assigned aircraft before previewing. Assign ON_wingman to the pilot unit, not the aircraft.
 7. Optional: place a verified contact asset and assign ON_contactAircraft. Mark it hostile only after confirming the asset's faction and intended role.
 
@@ -23,11 +23,11 @@ This guide covers the current 0.2.0-dev SQF framework. It does not replace the d
 - Start the engine using the actual aircraft-mod procedure and verify that the startup report becomes available.
 - Perform the actual carrier taxi/launch procedure. Verify the launch report is unavailable while grounded and available only after becoming airborne above 50 metres.
 - Verify wingman follow/hold-fire behavior if the AI pilot was configured.
-- Enter the CAP marker while airborne and verify station time accumulates.
+- Enter the CAS area marker while airborne and verify time-on-station accumulates.
 - If a contact is configured, verify it is detected only within the scripted distance threshold; confirm visual identification is unavailable outside the configured identification range.
 - Verify that an unmarked contact cannot be declared hostile. For a verified hostile test object, set ON_isHostile=true in its Eden init field and confirm the declaration action appears only after identification.
-- Verify that CAP does not transition to RTB while contact state is UNKNOWN, IDENTIFIED, or HOSTILE_CONFIRMED.
-- Resolve the contact, complete the CAP timer, and return to the carrier in the assigned aircraft.
+- Verify that CAS does not transition to RTB until the player reports the target area clear.
+- Complete the CAS area timer, verify no configured enemy units remain in the target radius, report the area clear, and return to the carrier.
 - Verify recovery requires the assigned aircraft to be grounded, below 25 km/h, and within 250 metres of the carrier object.
 - Exit the aircraft and complete the debrief on foot near the carrier.
 - Confirm the debrief contains only the measured data listed in the framework documentation.
@@ -52,6 +52,33 @@ Check the RPT after each preview for undefined variables, missing objects, SQF s
 - Contact detected, classified non-hostile, confirmed hostile, destroyed before identification, and lost outside the detection radius.
 - CAP timer reset when leaving the station and held RTB while a contact remains unresolved.
 - Aircraft destroyed before recovery and recovery attempted in an unassigned vehicle.
-- Full end-to-end sortie with the actual F/A-18E and USS Nimitz mods loaded.
+- Full end-to-end sortie with the actual F/A-18F and USS Nimitz mods loaded.
 
 No in-game tests have been run by this repository automation.
+
+## Enemy deployment configuration
+
+Add the following configuration before the mission calls `scripts\\core\\initMission.sqf` in its `init.sqf`. Replace every placeholder classname with a classname verified in the installed mod set.
+
+```sqf
+missionNamespace setVariable ["ON_enemySide", east];
+missionNamespace setVariable ["ON_enemySpawnDefinitions", [
+    ["AA", "ON_SPAWN_AA_NORTH", "VERIFIED_AA_VEHICLE_CLASS", east],
+    ["ARMOR", "ON_SPAWN_ARMOR_WEST", "VERIFIED_TANK_CLASS", east],
+    ["ARTILLERY", "ON_SPAWN_ARTY_HILL", "VERIFIED_ARTILLERY_CLASS", east]
+]];
+
+missionNamespace setVariable ["ON_convoyDefinitions", [
+    ["ALPHA",
+        ["VERIFIED_TRUCK_CLASS", "VERIFIED_ESCORT_CLASS"],
+        ["ON_ROUTE_CONVOY_ALPHA_01", "ON_ROUTE_CONVOY_ALPHA_02", "ON_ROUTE_CONVOY_ALPHA_03"],
+        east
+    ]
+]];
+```
+
+Create one map marker for every named spawn location. For convoys, create route markers in travel order and use a unique marker sequence for each convoy ID. AA, armor, and artillery spawn at their own marker coordinates and face the marker direction. Convoy vehicles are distributed across the route markers where possible, then follow the route in order. Place route markers on roads for ground vehicles.
+
+The director creates crew using the selected vehicle configs. It does not guarantee faction-correct crew if the vehicle config is not set up for the intended side; verify crew faction in Eden preview. Empty definitions intentionally produce no enemy units. Check the RPT for invalid markers and classnames.
+
+Current limits: no infantry dismount behavior, no dynamic tactical repositioning for static artillery/AA, no ambush logic, and no convoy damage/escort reactions are implemented yet.
