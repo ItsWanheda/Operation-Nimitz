@@ -20,6 +20,21 @@ private _deployments = missionNamespace getVariable ["ON_assetDeployments", []];
 private _spawnedAssets = [];
 private _usedUniqueMarkers = [];
 
+// The playable player entity is defined by Eden's mission.sqm, not spawned as an AI unit.
+// This key lets the user keep its intended classname in the same manual asset config.
+private _expectedPlayerClass = _classMap getOrDefault ["PLAYER_UNIT", ""];
+if (_expectedPlayerClass isNotEqualTo "") then {
+    if !(isClass (configFile >> "CfgVehicles" >> _expectedPlayerClass)) then {
+        [format ["PLAYER_UNIT classname '%1' is not present in CfgVehicles.", _expectedPlayerClass]] call ON_fnc_log;
+    } else {
+        if ((typeOf player) isNotEqualTo _expectedPlayerClass) then {
+            [format ["Playable Eden unit is '%1' but config PLAYER_UNIT expects '%2'. Set the player unit to the configured class in Eden.", typeOf player, _expectedPlayerClass]] call ON_fnc_log;
+        } else {
+            ["Playable player unit matches configured PLAYER_UNIT classname."] call ON_fnc_recordEvent;
+        };
+    };
+};
+
 // -----------------------------------------------------------------------------
 // INDIVIDUAL UNITS, VEHICLES, AIRCRAFT, CARRIER, STATIC WEAPONS
 // -----------------------------------------------------------------------------
