@@ -30,7 +30,7 @@ _carrier addAction [
         private _terminalPhase = missionNamespace getVariable ["ON_phase", "DEBRIEF"];
         private _missionSeconds = floor (time - (missionNamespace getVariable ["ON_missionStartTime", time]));
         private _flightSeconds = missionNamespace getVariable ["ON_metricFlightSeconds", 0];
-        private _capSeconds = missionNamespace getVariable ["ON_metricCapTime", 0];
+        private _casSeconds = missionNamespace getVariable ["ON_metricCasTime", 0];
         private _distance = round (missionNamespace getVariable ["ON_metricVehicleDistance", 0]);
         private _maxAltitude = round (missionNamespace getVariable ["ON_metricMaxAltitude", 0]);
         private _maxSpeed = round (missionNamespace getVariable ["ON_metricMaxSpeed", 0]);
@@ -41,14 +41,14 @@ _carrier addAction [
         ["SUCCESS"] call ON_fnc_endMission;
 
         hint parseText format [
-            "<t size='1.3'>OPERATION NIMITZ — SORTIE DEBRIEF</t><br/><br/>Flight: JOKER 1-1<br/>Result: %1<br/>Last operational phase: %2<br/>Contact state: %3<br/>Wingman: %4<br/><br/><t underline='1'>Measured mission data</t><br/>Mission duration: %5<br/>Airborne time: %6<br/>CAP on-station time: %7<br/>Sampled vehicle travel: %8 m<br/>Maximum altitude: %9 m<br/>Maximum sampled speed: %10 km/h<br/>Recorded events: %11<br/><br/>Fuel, stores, damage, hook engagement, and aircraft recorder data are not available from this framework.",
+            "<t size='1.3'>OPERATION NIMITZ — SORTIE DEBRIEF</t><br/><br/>Flight: JOKER 1-1<br/>Result: %1<br/>Last operational phase: %2<br/>Contact state: %3<br/>Wingman: %4<br/><br/><t underline='1'>Measured mission data</t><br/>Mission duration: %5<br/>Airborne time: %6<br/>CAS area time: %7<br/>Sampled vehicle travel: %8 m<br/>Maximum altitude: %9 m<br/>Maximum sampled speed: %10 km/h<br/>Recorded events: %11<br/><br/>Fuel, stores, damage, hook engagement, and aircraft recorder data are not available from this framework.",
             missionNamespace getVariable ["ON_missionResult", _result],
             _terminalPhase,
             _contactStatus,
             _wingmanStatus,
             [_missionSeconds] call ON_fnc_formatDuration,
             [_flightSeconds] call ON_fnc_formatDuration,
-            [_capSeconds] call ON_fnc_formatDuration,
+            [_casSeconds] call ON_fnc_formatDuration,
             _distance,
             _maxAltitude,
             _maxSpeed,
