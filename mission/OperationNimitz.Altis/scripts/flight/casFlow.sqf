@@ -22,7 +22,7 @@ private _timeOnStation = missionNamespace getVariable ["ON_casTimeRequired", 60]
 private _elapsed = 0;
 private _announced = false;
 
-["ON_task_cas", "Proceed to the assigned CAS area, establish the target area, and engage only positively identified hostile elements under the mission ROE. Report the area clear after verifying the target area.", _targetPosition] call ON_fnc_createTask;
+["ON_task_cas", "Close Air Support", "Proceed to the assigned CAS area, establish the target area, and engage only positively identified hostile elements under the mission ROE. Report the area clear after verifying the target area.", _targetPosition] call ON_fnc_createTask;
 
 while { (missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT" } do {
     private _aircraft = vehicle player;
@@ -75,7 +75,7 @@ if ((missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT" && { _
             ["JTAC", "Target area reported clear. JOKER 1-1, proceed to carrier recovery."] call ON_fnc_message;
             ["CAS target area reported clear by player; no hostile EAST units remain in the target radius."] call ON_fnc_recordEvent;
             ["RTB"] call ON_fnc_setPhase;
-            ["ON_task_rtb", "Return to the carrier, recover in the assigned aircraft, shut down, and proceed to debrief.", missionNamespace getVariable ["ON_carrier", objNull]] call ON_fnc_createTask;
+            ["ON_task_rtb", "Return to carrier", "Return to the carrier, recover in the assigned aircraft, shut down, and proceed to debrief.", missionNamespace getVariable ["ON_carrier", objNull]] call ON_fnc_createTask;
             [] execVM "scripts\carrier\recoveryFlow.sqf";
             _target removeAction _actionId;
         },
