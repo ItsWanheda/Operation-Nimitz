@@ -4,101 +4,71 @@
 **Mission folder:** mission/OperationNimitz.Altis  
 **Active implementation branch:** feat/mission-system-foundation
 
-This milestone extends the first SQF foundation with scripted contact progression, player-confirmed ROE, radio support endpoints, mission event journaling, sampled sortie telemetry, setup validation, and safer CAP/RTB gating.
+This milestone provides the mission flow and a generic classname-driven deployment system. Mod assets are selected manually in one configuration file; mission scripts do not assume or invent Workshop classnames.
 
 ## Implemented systems
 
 - Mission bootstrap, shared phase validation, task helpers, diagnostic logging, and setup checks.
+- Central manual classname map and marker-driven spawner for individual units, vehicles, aircraft, carriers and static weapons.
+- Optional native vehicle crew creation and separately configured pilot seating.
+- Marker-unique deployment checks for individual assets.
+- Convoy spawning through classname keys and ordered, unique route-marker lists.
 - Diary briefing and ready-room-to-aircraft progression.
-- Phase-gated preflight, engine-start, taxi, and launch confirmation actions. Engine-start reporting requires the assigned aircraft engine to be running; launch reporting requires the aircraft to be airborne above 50 metres.
-- AI wingman join-up order and sampled formation-distance monitoring when the pilot is already seated in an editor-placed aircraft. The group remains on hold fire.
+- Phase-gated preflight, engine-start, taxi, and launch confirmation actions.
+- AI wingman follow/hold-fire behavior when a pilot is seated in the configured aircraft.
 - CAS area monitoring with configurable marker, radius, and on-station time.
 - Optional editor-placed contact detection, player visual-identification confirmation, ROE-gated hostile declaration, and contact resolution.
-- CAS tasking monitors the assigned area and requires a player area-clear report after the configured time-on-station.
 - Optional AWACS, tanker, carrier-control, and deck-crew status calls.
 - Basic recovery gate requiring the assigned aircraft, grounded state, low speed, and proximity to the carrier.
-- Debrief interaction with measured mission time, sampled airborne time, CAP time, sampled vehicle travel, maximum sampled altitude/speed, wingman state, contact state, and event count.
-- Bounded in-memory event journal and RPT diagnostic logging.
+- Debrief interaction, sampled sortie telemetry and bounded event journal.
 
-## Required Eden setup
+## Manual classname configuration
 
-The repository still does not contain an Eden-generated mission.sqm. Create an Altis mission in Eden Editor, save it as OperationNimitz.Altis, and copy the SQF source from this folder into that mission directory. Add and verify all editor-placed objects before testing.
+Edit **`mission/OperationNimitz.Altis/config/assetConfig.sqf`**.
 
-| Eden object | Variable name | Required | Notes |
-|---|---|---:|---|
-| Player unit | JOKER_1_1 | Yes | Assign player control in Eden. |
-| Parked F/A-18F | ON_playerAircraft | Yes | Select the verified F/A-18F Super Hornet 2020 asset. |
-| USS Nimitz object | ON_carrier | Yes | Must be the installed, verified carrier object. |
-| CAS area marker | ON_mrk_CAS | Yes | Place at the intended patrol station. |
-| AI wingman pilot | ON_wingman | No | Assign the pilot unit, already seated in its aircraft. |
-| AWACS support object/unit | ON_awacs | No | Optional; status-call reference only. |
-| Tanker support object/unit | ON_tanker | No | Optional; status-call reference only. |
-| Deck crew object/unit | ON_deckCrew | No | Optional; status-call reference only. |
-| Scripted contact aircraft | ON_contactAircraft | No | Optional; select a verified AFR asset only after the mod is installed. |
+The hashmap provides separate keys for:
 
-Carrier control uses ON_carrier by default; an optional ON_atc object can override it.
+- USS Nimitz, player F/A-18F, wingman F/A-18F, wingman pilot.
+- AWACS aircraft/pilot, tanker aircraft/pilot, deck crew.
+- USMC and AFR infantry roles.
+- Cars, APCs, IFVs, tanks, AA, artillery, mortars, static weapons, helicopters and aircraft.
+- Convoy trucks, escort vehicles and optional custom mod assets.
 
-### Contact hostility metadata
+Enter the exact classname into the desired key. Then add one row to `ON_assetDeployments` with its type, classname key, marker, side, crew behavior, optional mission reference and unique-marker setting. Empty classname keys disable their rows.
 
-For a verified hostile contact, set the following in that object's Eden init field only after confirming its faction and role:
+The director supports:
+- `UNIT`: one infantry/man unit.
+- `VEHICLE`: any valid `CfgVehicles` object class, including ground vehicles, aircraft, carrier objects and static weapons.
+- `createCrew`: creates the vehicle's configured native crew.
+- `driverVehicleVariable`: optionally seats a separately configured unit in a previously spawned vehicle's driver seat.
+- `missionVariable`: exposes the spawned object through a missionNamespace reference used by the framework.
 
-    this setVariable ["ON_isHostile", true, true];
+Convoy definitions reference classname keys and ordered route marker names. Each convoy requires at least as many unique route markers as vehicles. Static enemy spawn rows should use a unique marker for every element.
 
-Leave this unset or false for a non-hostile / unclassified contact. The player cannot use the hostile-declaration action until the contact is first detected, brought within the identification distance, and reported visually identified. Proximity alone never authorizes engagement.
+See [Manual Asset and Classname Configuration](asset-classname-config.md) for the complete schema and examples.
 
-## Sortie flow
+## Required setup and current limits
 
-1. The player reviews the diary briefing and walks to the assigned aircraft.
-2. The player begins and completes the external preflight inspection.
-3. The player boards the assigned aircraft and performs the actual installed-mod engine-start procedure. The startup report is gated on the engine being on.
-4. The player performs the actual installed-mod taxi and launch procedure. The launch report is gated on the assigned aircraft being airborne above 50 metres.
-5. The AI wingman controller issues a follow order only if the assigned pilot is already seated in an editor-placed aircraft.
-6. The flight proceeds to the CAP marker and accumulates the configured on-station time while airborne and inside the radius.
-7. If an optional scripted contact is configured, the mission detects it inside the configured mission-distance radius. The player must close to identification range and report visual identification. A hostile declaration is available only if the contact object is marked ON_isHostile=true.
-8. The CAP timer may be satisfied while a contact is active, but RTB is held until contact state becomes RESOLVED.
-9. The player returns in the assigned aircraft. The recovery monitor checks grounded state, speed below 25 km/h, and distance under 250 metres from the carrier object.
-10. The player shuts down, exits the aircraft, and completes the debrief interaction on foot near the carrier.
+The repository still does not contain an Eden-generated `mission.sqm`. The mission must be opened in Eden, configured and tested with the installed mods.
 
-## Marker-driven enemy deployment
+The deployment director validates that a classname exists in `CfgVehicles`. It cannot establish that a Workshop asset is compatible, correctly factioned, crewable, correctly simulated, or suitable for a specific marker. Those details require in-game verification.
 
-The deployment director reads `ON_enemySpawnDefinitions` and `ON_convoyDefinitions` from `missionNamespace`. AA, armor, and artillery each use their own named spawn marker. Convoys use ordered route-marker lists and distribute vehicles along the configured route markers before following the route. No classnames are assumed. Missing markers and invalid classnames are logged and skipped. Configure definitions in the mission `init.sqf` before calling `scripts\\core\\initMission.sqf`; see the testing guide for examples.
+The USS Nimitz Workshop listing's installability/compatibility status remains unresolved. Its advertised features are not treated as verified in-game capabilities. Carrier spawning at a marker is not a simulated catapult, deck attachment or arresting-wire system.
 
-## Scripted support calls
-
-The mission provides status-call actions for AWACS, tanker, Nimitz control, and deck crew. Optional references are required for AWACS, tanker, and deck crew. Nimitz control defaults to the carrier object.
-
-These are communications/status endpoints only. They do not spawn or fly support aircraft, implement a radar picture, direct AI sensors, refuel the player, animate deck crew, grant actual catapult clearance, or replace the selected mods' procedures.
-
-## Configuration defaults
-
-The defaults are initialized in scripts/core/initMission.sqf:
-
-| Setting | Default | Meaning |
-|---|---:|---|
-| ON_casAreaMarker | ON_mrk_CAS | CAS area marker. |
-| ON_casAreaRadius | 1200 m | Station boundary. |
-| ON_casTimeRequired | 120 s | Required accumulated on-station time. |
-| ON_contactDetectionRange | 8000 m | Scripted mission-distance detection threshold. |
-| ON_contactIdentificationRange | 2500 m | Player-confirmed identification range. |
-
-The contact object is optional. When no ON_contactAircraft is assigned, contact handling is skipped and the CAS task can complete normally.
-
-## Important implementation limits
-
-- No mission.sqm is committed yet; a valid Eden scenario and exact editor assets are still required.
-- Workshop aircraft, USMC, and carrier classnames have not been supplied or verified. No classnames are invented by this framework.
-- The USS Nimitz Workshop listing's installability/compatibility status remains unresolved. Its advertised features are not treated as verified in-game capabilities.
+Other current limits:
 - Player confirmation actions are not aircraft-system simulations.
 - The contact detector is a distance gate, not radar, AWACS sensor fusion, or visual line-of-sight simulation.
-- Hostile declaration depends on manually verified Eden metadata and player confirmation. No weapon is fired automatically.
-- Wingman behavior is basic AI follow/formation control. There is no automatic aircraft spawning, pilot boarding, advanced BVR tactics, or carrier recovery logic.
-- Recovery proximity is not proof of a successful arrested landing or hook/cable engagement.
-- Telemetry uses periodic position samples and game time. It is not a calibrated flight-data recorder and does not measure fuel, stores, damage, or carrier-wire engagement.
-- No ARMA 3 runtime test has been performed in this environment. Run the mission in-game and inspect the RPT before treating it as playable.
+- Hostile declaration depends on manually verified metadata and player confirmation.
+- Wingman behavior is basic AI follow/formation control.
+- Convoy logic follows configured waypoints; it does not provide tactical reactions, damage response, ambush behavior or infantry dismounts.
+- Recovery proximity is not proof of arrested landing or hook/cable engagement.
+- No ARMA 3 runtime test has been performed in this environment.
 
-## Next dependency-gated work
+## Next steps
 
-1. Verify/install the Workshop dependencies and provide exact editor classnames for the F/A-18F, USMC units, carrier, support aircraft, and AFR contact assets.
-2. Build and commit the Eden-generated mission.sqm from the verified editor setup.
-3. Integrate actual aircraft startup, launch, tanker, carrier-control, and recovery features only where the installed mods expose documented and tested interactions.
-4. Run the scripted sortie in ARMA 3, correct SQF/RPT errors, and test normal, missing-object, lost-wingman, destroyed-contact, and failed-recovery cases.
+1. Fill the manual classname map with exact classnames from the installed mods.
+2. Add the matching spawn and route markers in Eden.
+3. Verify each asset, crew faction, spawn position and convoy route in preview.
+4. Generate and commit the Eden mission.sqm.
+5. Integrate only those carrier/aircraft procedures exposed and validated by the installed mods.
+6. Run the complete sortie and fix RPT/runtime errors.
