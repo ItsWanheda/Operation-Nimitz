@@ -1,6 +1,6 @@
 # Operation Nimitz — Eden Setup and Test Guide
 
-This guide covers the current 0.2.0-dev SQF framework. It does not replace the dependency/classname verification checklist.
+This guide covers the current 0.3.0-dev SQF framework. It does not replace the dependency/classname verification checklist.
 
 ## Before opening the mission
 
