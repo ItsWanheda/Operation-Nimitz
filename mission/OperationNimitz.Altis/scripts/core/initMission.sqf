@@ -221,7 +221,7 @@ ON_fnc_validateSetup = {
         ["Optional AI wingman reference ON_wingman is not configured."] call ON_fnc_log;
     };
     if (isNull (missionNamespace getVariable ["ON_contactAircraft", objNull])) then {
-        ["No optional scripted contact object is configured. CAP will not wait for a contact."] call ON_fnc_log;
+        ["No optional scripted contact object is configured; CAS proceeds without scripted contact handling."] call ON_fnc_log;
     };
 
     (count _errors) isEqualTo 0
