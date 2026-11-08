@@ -77,7 +77,7 @@ missionNamespace setVariable ["ON_convoyDefinitions", [
 ]];
 ```
 
-Create one map marker for every named spawn location. For convoys, create route markers in travel order and use a unique marker sequence for each convoy ID. AA, armor, and artillery spawn at their own marker coordinates and face the marker direction. Convoy vehicles are distributed across the route markers where possible, then follow the route in order. Place route markers on roads for ground vehicles.
+Create one map marker for every named AA, armor, and artillery spawn location; do not reuse a static spawn marker. For convoys, create at least one unique route marker per vehicle, in travel order, and use a route-marker sequence not shared by another convoy. AA, armor, and artillery spawn at their own marker coordinates and face the marker direction. Each convoy vehicle starts at its own route marker, then the convoy follows the remaining route markers in order and cycles back to the first marker. Place route markers on roads for ground vehicles.
 
 The director creates crew using the selected vehicle configs. It does not guarantee faction-correct crew if the vehicle config is not set up for the intended side; verify crew faction in Eden preview. Empty definitions intentionally produce no enemy units. Check the RPT for invalid markers and classnames.
 
