@@ -22,6 +22,23 @@ private _suspiciousThreshold = _settings getOrDefault ["suspiciousKnowledge", 1.
 private _alertedThreshold = _settings getOrDefault ["alertedKnowledge", 2.5];
 private _engagedThreshold = _settings getOrDefault ["engagedKnowledge", 3.5];
 private _scanInterval = (_settings getOrDefault ["scanInterval", 5]) max 1;
+
+private _thresholdsValid = (
+    _suspiciousThreshold isEqualType 0
+    && { _alertedThreshold isEqualType 0 }
+    && { _engagedThreshold isEqualType 0 }
+    && { _suspiciousThreshold >= 0 }
+    && { _suspiciousThreshold < _alertedThreshold }
+    && { _alertedThreshold < _engagedThreshold }
+    && { _engagedThreshold <= 4 }
+);
+
+if (!_thresholdsValid) then {
+    ["Invalid enemy knowledge thresholds. Defaults 1.5 / 2.5 / 3.5 restored."] call ON_fnc_log;
+    _suspiciousThreshold = 1.5;
+    _alertedThreshold = 2.5;
+    _engagedThreshold = 3.5;
+};
 private _zones = missionNamespace getVariable ["ON_enemyAlertZones", []];
 
 ON_fnc_alertRank = {
