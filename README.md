@@ -14,7 +14,7 @@ The repository is initialized. Mission requirements, verified mod dependencies, 
 
 > **Verification rule:** Do not assume Workshop assets, classnames, mod features, carrier procedures, or compatibility. Record them as pending confirmation until tested in the installed ARMA 3 environment.
 
-## Confirmed Workshop references
+## Workshop references supplied for the project
 
 | Dependency | Workshop ID | Status |
 |---|---:|---|
