@@ -271,9 +271,12 @@ private _convoyRecords = [];
         } else {
             {
                 deleteVehicle _x;
+            } forEach (units _convoyGroup);
+            {
+                deleteVehicle _x;
             } forEach _convoyVehicles;
             deleteGroup _convoyGroup;
-            [format ["Convoy '%1' failed during vehicle creation; partial vehicles removed.", _convoyId]] call ON_fnc_log;
+            [format ["Convoy '%1' failed during vehicle/crew creation; partial convoy removed.", _convoyId]] call ON_fnc_log;
         };
     };
 } forEach _convoys;
