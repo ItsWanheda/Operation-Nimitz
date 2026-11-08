@@ -172,7 +172,7 @@ Supported triggers:
 
 - `ALERT_LEVEL`: start when the enemy alert reaches `SUSPICIOUS`, `ALERTED`, or `ENGAGED`.
 - `PHASE`: start when the mission enters a named phase such as `IN_FLIGHT`.
-- `PLAYER_RADIUS`: start when the player/assigned aircraft enters `[marker, radiusMetres]`.
+- `PLAYER_RADIUS`: start when the player or the vehicle currently occupied by the player enters `[marker, radiusMetres]`.
 
 An empty waypoint list creates a garrison wave. One or more waypoint markers create a moving QRF-style wave. Each later wave is offset from the previous wave's spawn area. The controller attempts to spawn up to `maxWaves`, waiting for `waveIntervalSeconds` between waves. It uses the same manually configured classname keys as the force-package system. No reinforcement definitions are active by default; uncomment and configure only after placing all markers and checking classnames.
 
