@@ -233,4 +233,4 @@ ON_fnc_validateSetup = {
 [] execVM "scripts\core\telemetry.sqf";
 
 [] call ON_fnc_validateSetup;
-["Mission framework 0.2.0-dev initialized."] call ON_fnc_recordEvent;
+["Mission framework 0.3.0-dev initialized."] call ON_fnc_recordEvent;
