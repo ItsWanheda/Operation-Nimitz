@@ -145,7 +145,7 @@ The alert system monitors the ARMA AI `knowsAbout` value for living units on the
 - `ALERTED`: hostile knowledge or a zone has reached the alert threshold.
 - `ENGAGED`: hostile knowledge or a zone has reached the highest threshold.
 
-Adjust the `ON_enemyAlertSettings` hashmap in `assetConfig.sqf` to set the side, knowledge thresholds, scan interval, and enable/disable state. Optional zone rows use:
+Adjust the `ON_enemyAlertSettings` hashmap in `assetConfig.sqf` to set knowledge thresholds, scan interval, and enable/disable state. Alert detection uses the shared `ON_enemySide` setting at the bottom of the same file. Optional zone rows use:
 
 ```sqf
 [id, marker, radiusMetres, minimumAlertLevel]
