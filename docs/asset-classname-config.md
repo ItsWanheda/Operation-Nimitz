@@ -103,7 +103,7 @@ The same process works for a man unit by changing the row type to `UNIT`. This k
 
 ## 6. Startup and validation
 
-`mission/init.sqf` loads `config/assetConfig.sqf` before the core mission system. The asset director runs before mandatory setup validation, so configured carrier and player-aircraft references are available to the framework.
+`mission/OperationNimitz.Altis/init.sqf` loads `config/assetConfig.sqf` before the core mission system. The asset director runs before mandatory setup validation, so configured carrier and player-aircraft references are available to the framework.
 
 The director logs missing markers, invalid classnames and failed spawns to the ARMA 3 RPT with the `[OperationNimitz]` prefix. Empty classname fields intentionally skip their deployment. A valid config entry only proves that the classname exists in the loaded config; it does not prove the mod behaves correctly in-game.
 
