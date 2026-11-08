@@ -31,7 +31,8 @@ ON_fnc_spawnForcePackage = {
         ["_classKeys", [], [[]]],
         ["_spawnMarker", "", [""]],
         ["_behavior", "GARRISON", [""]],
-        ["_waypointMarkers", [], [[]]]
+        ["_waypointMarkers", [], [[]]],
+        ["_waveIndex", 1, [0]]
     ];
 
     private _assetClassMap = missionNamespace getVariable ["ON_assetClassnames", createHashMap];
@@ -78,8 +79,9 @@ ON_fnc_spawnForcePackage = {
         private _row = _forEachIndex;
         private _column = _row mod 3;
         private _rank = floor (_row / 3);
+        private _waveOffset = (((_waveIndex max 1) - 1) * 30);
         private _spawnPosition = [
-            (_origin select 0) + ((_column - 1) * 3.5),
+            (_origin select 0) + ((_column - 1) * 3.5) + _waveOffset,
             (_origin select 1) + (_rank * 3.5),
             0
         ];
@@ -100,6 +102,7 @@ ON_fnc_spawnForcePackage = {
     };
 
     _group setVariable ["ON_forcePackageId", _packageId, true];
+    _group setVariable ["ON_forceWaveIndex", _waveIndex, true];
     _group setBehaviour (if (_behavior isEqualTo "GARRISON") then { "AWARE" } else { if (_behavior isEqualTo "QRF") then { "AWARE" } else { "SAFE" } });
     _group setCombatMode (if (_behavior isEqualTo "GARRISON") then { "GREEN" } else { "YELLOW" });
     _group setSpeedMode (if (_behavior isEqualTo "QRF") then { "NORMAL" } else { "LIMITED" });
