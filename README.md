@@ -10,7 +10,7 @@ The intended first sortie is a Combat Air Patrol (CAP): ready-room briefing, fli
 
 ## Project status
 
-This repository is being initialized. Mission requirements, verified mod dependencies, asset/classname records, implementation phases, and acceptance criteria will be maintained in the project documentation.
+The repository is initialized. Mission requirements, verified mod dependencies, asset/classname records, implementation phases, and acceptance criteria are tracked in the [mission-building checklist](docs/mission-building-checklist.md).
 
 > **Verification rule:** Do not assume Workshop assets, classnames, mod features, carrier procedures, or compatibility. Record them as pending confirmation until tested in the installed ARMA 3 environment.
 
@@ -26,4 +26,4 @@ This repository is being initialized. Mission requirements, verified mod depende
 
 Mission work will be developed incrementally in Eden Editor with modular SQF, explicit task/trigger flow, and repeatable single-player testing. Changes should be developed on feature branches and reviewed before integration.
 
-See the mission-building checklist in the documentation once the planning branch is published.
+Start with the [mission-building checklist](docs/mission-building-checklist.md) for prerequisites, dependency verification, implementation order, testing, and release acceptance criteria.
