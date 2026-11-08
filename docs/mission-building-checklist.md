@@ -33,7 +33,7 @@ Do not mark a dependency, classname, capability, or procedure complete merely be
 - [x] Player aircraft: **F/A-18F Super Hornet** (two-seat F variant).
 - [x] Player callsign: **JOKER 1-1**.
 - [x] AI wingman callsign: **JOKER 1-2**.
-- [x] Initial mission: **Combat Air Patrol (CAP)**.
+- [x] Initial mission: **Close Air Support (CAS)**.
 - [x] Opposing force concept: **AFR / Altis Armed Forces**.
 - [x] AI controls the wingman and supporting units; the player directly flies the lead aircraft.
 
