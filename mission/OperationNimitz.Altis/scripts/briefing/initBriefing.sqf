@@ -5,7 +5,7 @@ waitUntil { !isNil "ON_fnc_createTask" };
 
 player createDiaryRecord ["Diary", [
     "Communications",
-    "<font face='PuristaMedium'>JOKER 1-1</font><br/>Flight: JOKER 1-1 / JOKER 1-2<br/>Carrier control: NIMITZ<br/>AWACS: callsign and capability pending verification.<br/><br/>This initial build uses on-screen radio-style messages. A dedicated radio mod is not assumed."
+    "<font face='PuristaMedium'>JOKER 1-1</font><br/>Flight: JOKER 1-1 / JOKER 1-2<br/>Carrier control: NIMITZ<br/>AWACS: callsign and capability pending verification.<br/><br/>Use the assigned aircraft's Radio actions to request a SITREP, threat report, reinforcement status, convoy status, or updated tasking. These are scripted status messages, not a simulated radio network or radar picture.<br/><br/>Enemy alert escalation uses AI knowledge and any map zones configured by the mission author."
 ]];
 
 player createDiaryRecord ["Diary", [
