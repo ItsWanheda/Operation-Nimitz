@@ -12,9 +12,9 @@ This milestone extends the first SQF foundation with scripted contact progressio
 - Diary briefing and ready-room-to-aircraft progression.
 - Phase-gated preflight, engine-start, taxi, and launch confirmation actions. Engine-start reporting requires the assigned aircraft engine to be running; launch reporting requires the aircraft to be airborne above 50 metres.
 - AI wingman join-up order and sampled formation-distance monitoring when the pilot is already seated in an editor-placed aircraft. The group remains on hold fire.
-- CAP station monitoring with configurable marker, radius, and on-station time.
+- CAS area monitoring with configurable marker, radius, and on-station time.
 - Optional editor-placed contact detection, player visual-identification confirmation, ROE-gated hostile declaration, and contact resolution.
-- CAP/RTB progression waits for an active scripted contact to be resolved.
+- CAS tasking monitors the assigned area and requires a player area-clear report after the configured time-on-station.
 - Optional AWACS, tanker, carrier-control, and deck-crew status calls.
 - Basic recovery gate requiring the assigned aircraft, grounded state, low speed, and proximity to the carrier.
 - Debrief interaction with measured mission time, sampled airborne time, CAP time, sampled vehicle travel, maximum sampled altitude/speed, wingman state, contact state, and event count.
@@ -27,9 +27,9 @@ The repository still does not contain an Eden-generated mission.sqm. Create an A
 | Eden object | Variable name | Required | Notes |
 |---|---|---:|---|
 | Player unit | JOKER_1_1 | Yes | Assign player control in Eden. |
-| Parked F/A-18E | ON_playerAircraft | Yes | Select the verified F/A-18E Super Hornet 2020 asset. |
+| Parked F/A-18F | ON_playerAircraft | Yes | Select the verified F/A-18F Super Hornet 2020 asset. |
 | USS Nimitz object | ON_carrier | Yes | Must be the installed, verified carrier object. |
-| CAP marker | ON_mrk_CAP | Yes | Place at the intended patrol station. |
+| CAS area marker | ON_mrk_CAS | Yes | Place at the intended patrol station. |
 | AI wingman pilot | ON_wingman | No | Assign the pilot unit, already seated in its aircraft. |
 | AWACS support object/unit | ON_awacs | No | Optional; status-call reference only. |
 | Tanker support object/unit | ON_tanker | No | Optional; status-call reference only. |
@@ -59,6 +59,10 @@ Leave this unset or false for a non-hostile / unclassified contact. The player c
 9. The player returns in the assigned aircraft. The recovery monitor checks grounded state, speed below 25 km/h, and distance under 250 metres from the carrier object.
 10. The player shuts down, exits the aircraft, and completes the debrief interaction on foot near the carrier.
 
+## Marker-driven enemy deployment
+
+The deployment director reads `ON_enemySpawnDefinitions` and `ON_convoyDefinitions` from `missionNamespace`. AA, armor, and artillery each use their own named spawn marker. Convoys use ordered route-marker lists and distribute vehicles along the configured route markers before following the route. No classnames are assumed. Missing markers and invalid classnames are logged and skipped. Configure definitions in the mission `init.sqf` before calling `scripts\\core\\initMission.sqf`; see the testing guide for examples.
+
 ## Scripted support calls
 
 The mission provides status-call actions for AWACS, tanker, Nimitz control, and deck crew. Optional references are required for AWACS, tanker, and deck crew. Nimitz control defaults to the carrier object.
@@ -71,13 +75,13 @@ The defaults are initialized in scripts/core/initMission.sqf:
 
 | Setting | Default | Meaning |
 |---|---:|---|
-| ON_capMarker | ON_mrk_CAP | CAP station marker. |
-| ON_capRadius | 1200 m | Station boundary. |
-| ON_capDuration | 120 s | Required accumulated on-station time. |
+| ON_casAreaMarker | ON_mrk_CAS | CAS area marker. |
+| ON_casAreaRadius | 1200 m | Station boundary. |
+| ON_casTimeRequired | 120 s | Required accumulated on-station time. |
 | ON_contactDetectionRange | 8000 m | Scripted mission-distance detection threshold. |
 | ON_contactIdentificationRange | 2500 m | Player-confirmed identification range. |
 
-The contact object is optional. When no ON_contactAircraft is assigned, contact handling is skipped and the CAP task can complete normally.
+The contact object is optional. When no ON_contactAircraft is assigned, contact handling is skipped and the CAS task can complete normally.
 
 ## Important implementation limits
 
@@ -94,7 +98,7 @@ The contact object is optional. When no ON_contactAircraft is assigned, contact 
 
 ## Next dependency-gated work
 
-1. Verify/install the Workshop dependencies and provide exact editor classnames for the F/A-18E, USMC units, carrier, support aircraft, and AFR contact assets.
+1. Verify/install the Workshop dependencies and provide exact editor classnames for the F/A-18F, USMC units, carrier, support aircraft, and AFR contact assets.
 2. Build and commit the Eden-generated mission.sqm from the verified editor setup.
 3. Integrate actual aircraft startup, launch, tanker, carrier-control, and recovery features only where the installed mods expose documented and tested interactions.
 4. Run the scripted sortie in ARMA 3, correct SQF/RPT errors, and test normal, missing-object, lost-wingman, destroyed-contact, and failed-recovery cases.
