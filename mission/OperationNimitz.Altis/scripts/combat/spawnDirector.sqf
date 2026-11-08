@@ -1,26 +1,16 @@
 /*
     Marker-driven AFR deployment director.
 
-    Spawn definition format:
+    Spawn definition:
       [role, spawnMarker, vehicleClassname, side]
     Roles: "AA", "ARMOR", "ARTILLERY"
 
-    Convoy definition format:
-      [convoyId, [vehicleClassnames...], [routeMarkerNames...], side]
+    Convoy definition:
+      [convoyId, [vehicleClassnames...], [orderedRouteMarkerNames...], side]
 
-    Example configuration belongs in mission init.sqf BEFORE initMission.sqf:
-      missionNamespace setVariable ["ON_enemySpawnDefinitions", [
-        ["AA", "ON_SPAWN_AA_NORTH", "VERIFIED_AA_CLASS", east],
-        ["ARMOR", "ON_SPAWN_ARMOR_WEST", "VERIFIED_TANK_CLASS", east],
-        ["ARTILLERY", "ON_SPAWN_ARTY_HILL", "VERIFIED_ARTY_CLASS", east]
-      ]];
-      missionNamespace setVariable ["ON_convoyDefinitions", [
-        ["ALPHA", ["VERIFIED_TRUCK_CLASS", "VERIFIED_ESCORT_CLASS"],
-          ["ON_ROUTE_CONVOY_ALPHA_01", "ON_ROUTE_CONVOY_ALPHA_02",
-           "ON_ROUTE_CONVOY_ALPHA_03"], east]
-      ]];
-
-    No classnames are assumed. Empty configuration means no enemies are spawned.
+    Configure missionNamespace arrays in mission init.sqf BEFORE initMission.sqf.
+    Every static enemy element needs its own spawn marker. Each convoy needs at
+    least one distinct route marker per vehicle. Classnames are never guessed.
 */
 waitUntil { !isNil "ON_fnc_recordEvent" };
 
@@ -31,6 +21,7 @@ missionNamespace setVariable ["ON_enemyDirectorStarted", true];
 
 private _spawned = [];
 private _usedSpawnMarkers = [];
+private _usedRouteMarkers = [];
 private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions", []];
 
 {
@@ -48,25 +39,24 @@ private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions",
             [format ["Enemy %1 spawn skipped; marker '%2' is missing.", _role, _marker]] call ON_fnc_log;
         } else {
             if (_marker in _usedSpawnMarkers) then {
-                [format ["Enemy spawn skipped; marker '%1' is already assigned to another element.", _marker]] call ON_fnc_log;
+                [format ["Enemy spawn skipped; marker '%1' is already assigned.", _marker]] call ON_fnc_log;
             } else {
-                _usedSpawnMarkers pushBack _marker;
-            if (_class isEqualTo "" || { !isClass (configFile >> "CfgVehicles" >> _class) }) then {
-                [format ["Enemy %1 spawn skipped; vehicle classname '%2' is invalid or unset.", _role, _class]] call ON_fnc_log;
-            } else {
-                private _position = getMarkerPos _marker;
-                private _vehicle = createVehicle [_class, _position, [], 0, "NONE"];
-                if (!isNull _vehicle) then {
-                    _vehicle setDir (markerDir _marker);
-                    createVehicleCrew _vehicle;
-                    private _crewGroup = createGroup [_side, true];
-                    (crew _vehicle) joinSilent _crewGroup;
-                    _vehicle setVariable ["ON_enemyRole", _role, true];
-                    _vehicle setVariable ["ON_spawnMarker", _marker, true];
-                    _spawned pushBack _vehicle;
-                    [format ["Spawned %1 asset '%2' at marker '%3'.", _role, _class, _marker]] call ON_fnc_recordEvent;
+                if (_class isEqualTo "" || { !isClass (configFile >> "CfgVehicles" >> _class) }) then {
+                    [format ["Enemy %1 spawn skipped; classname '%2' is invalid or unset.", _role, _class]] call ON_fnc_log;
+                } else {
+                    _usedSpawnMarkers pushBack _marker;
+                    private _vehicle = createVehicle [_class, getMarkerPos _marker, [], 0, "NONE"];
+                    if (!isNull _vehicle) then {
+                        _vehicle setDir (markerDir _marker);
+                        createVehicleCrew _vehicle;
+                        private _crewGroup = createGroup [_side, true];
+                        (crew _vehicle) joinSilent _crewGroup;
+                        _vehicle setVariable ["ON_enemyRole", _role, true];
+                        _vehicle setVariable ["ON_spawnMarker", _marker, true];
+                        _spawned pushBack _vehicle;
+                        [format ["Spawned %1 asset '%2' at marker '%3'.", _role, _class, _marker]] call ON_fnc_recordEvent;
+                    };
                 };
-            };
             };
         };
     };
@@ -78,31 +68,38 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
         ["_convoyId", "", [""]],
         ["_classes", [], [[]]],
         ["_routeMarkers", [], [[]]],
-        ["_side", east, [sideUnknown, east, west, independent, civilian]]
+        ["_side", east]
     ];
 
     private _validRoute = _routeMarkers select { _x in allMapMarkers };
-    if (_convoyId isEqualTo "" || { _classes isEqualTo [] } || { (count _validRoute) < (count _classes) }) then {
-        [format ["Convoy '%1' skipped: ID, vehicle list, or enough valid route markers are missing.", _convoyId]] call ON_fnc_log;
+    private _routeIsUnique = (count (_validRoute arrayIntersect _validRoute)) isEqualTo (count _validRoute);
+    private _routeAlreadyUsed = (_validRoute findIf { _x in _usedRouteMarkers }) >= 0;
+
+    if (
+        _convoyId isEqualTo ""
+        || { _classes isEqualTo [] }
+        || { (count _validRoute) < (count _classes) }
+        || { !_routeIsUnique }
+        || { _routeAlreadyUsed }
+    ) then {
+        [format ["Convoy '%1' skipped: provide a unique, valid route with at least one marker per vehicle.", _convoyId]] call ON_fnc_log;
     } else {
+        _usedRouteMarkers append _validRoute;
         private _convoyVehicles = [];
         private _convoyGroup = createGroup [_side, true];
 
         {
             private _class = _x;
-            private _spawnMarker = _validRoute select (_forEachIndex mod (count _validRoute));
+            private _spawnMarker = _validRoute select _forEachIndex;
+
             if (_class isEqualTo "" || { !isClass (configFile >> "CfgVehicles" >> _class) }) then {
                 [format ["Convoy '%1' skipped invalid vehicle classname '%2'.", _convoyId, _class]] call ON_fnc_log;
             } else {
-                private _spawnPosition = getMarkerPos _spawnMarker;
-                private _vehicle = createVehicle [_class, _spawnPosition, [], 0, "NONE"];
+                private _vehicle = createVehicle [_class, getMarkerPos _spawnMarker, [], 0, "NONE"];
                 if (!isNull _vehicle) then {
                     _vehicle setDir (markerDir _spawnMarker);
                     createVehicleCrew _vehicle;
-                    private _crew = crew _vehicle;
-                    if (_crew isNotEqualTo []) then {
-                        _crew joinSilent _convoyGroup;
-                    };
+                    (crew _vehicle) joinSilent _convoyGroup;
                     _vehicle setVariable ["ON_convoyId", _convoyId, true];
                     _vehicle setVariable ["ON_spawnMarker", _spawnMarker, true];
                     _convoyVehicles pushBack _vehicle;
@@ -111,7 +108,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
             };
         } forEach _classes;
 
-        if (!isNull _convoyGroup && { _convoyVehicles isNotEqualTo [] }) then {
+        if (_convoyVehicles isNotEqualTo []) then {
             {
                 private _waypoint = _convoyGroup addWaypoint [getMarkerPos _x, 0];
                 _waypoint setWaypointType "MOVE";
@@ -119,6 +116,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
                 _waypoint setWaypointBehaviour "SAFE";
                 _waypoint setWaypointCompletionRadius 20;
             } forEach (_validRoute select [1]);
+
             private _cycle = _convoyGroup addWaypoint [getMarkerPos (_validRoute select 0), 0];
             _cycle setWaypointType "CYCLE";
             _convoyGroup setBehaviour "SAFE";
@@ -126,6 +124,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
             _convoyGroup setVariable ["ON_convoyId", _convoyId, true];
             [format ["Convoy '%1' spawned with %2 vehicle(s), route markers: %3.", _convoyId, count _convoyVehicles, _validRoute joinString ", "]] call ON_fnc_recordEvent;
         } else {
+            deleteGroup _convoyGroup;
             [format ["Convoy '%1' could not form a crewed group; verify vehicle crew configs.", _convoyId]] call ON_fnc_log;
         };
     };
