@@ -73,7 +73,7 @@ Check the RPT for undefined variables, missing assets, invalid classnames, faile
 - Command actions when aircraft, convoys, reinforcement definitions, or support references are absent.
 - Convoy role tagging, checkpoint membership validation, pause duration, invalid reaction/speed/behaviour values, damage threshold boundaries, and partial-spawn cleanup.
 - Wrong asset type entered into a UNIT row or VEHICLE row.
-- Crew-enabled and empty vehicles; faction-correct crew verification.
+- Crew-enabled and empty vehicles; faction-correct crew verification; convoy classes that cannot generate a crew and partial-convoy cleanup.
 - Wingman pilot missing, pilot unable to enter aircraft, and aircraft missing.
 - Carrier spawn in water, aircraft spawn on deck, and object placement collisions.
 - Multiple convoys with independent route markers.
