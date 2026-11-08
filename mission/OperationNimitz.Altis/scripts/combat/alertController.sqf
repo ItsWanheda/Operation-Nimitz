@@ -17,7 +17,7 @@ waitUntil {
 
 private _settings = missionNamespace getVariable ["ON_enemyAlertSettings", createHashMap];
 private _enabled = _settings getOrDefault ["enabled", true];
-private _enemySide = _settings getOrDefault ["side", missionNamespace getVariable ["ON_enemySide", east]];
+private _enemySide = missionNamespace getVariable ["ON_enemySide", east];
 private _suspiciousThreshold = _settings getOrDefault ["suspiciousKnowledge", 1.5];
 private _alertedThreshold = _settings getOrDefault ["alertedKnowledge", 2.5];
 private _engagedThreshold = _settings getOrDefault ["engagedKnowledge", 3.5];
