@@ -200,16 +200,90 @@ missionNamespace setVariable ["ON_forcePackages", [
 ]];
 
 /*
-    CONVOY CONFIGURATION.
-    Each convoy vehicle starts at the corresponding route marker. The group
-    then follows the remaining markers in order and loops back to the first.
-    Add unique route marker names for every convoy.
+    ENEMY INTELLIGENCE / ALERT CONFIGURATION.
+
+    AI knowledge thresholds are sampled from living units on ON_enemySide.
+    This uses the engine's knowsAbout value; it is not radar or sensor fusion.
+    Optional zones use [id, marker, radiusMetres, minimumAlertLevel].
+    Leave zones empty until you have placed the markers in Eden.
+*/
+missionNamespace setVariable ["ON_enemyAlertSettings", createHashMapFromArray [
+    ["enabled", true],
+    ["side", east],
+    ["suspiciousKnowledge", 1.5],
+    ["alertedKnowledge", 2.5],
+    ["engagedKnowledge", 3.5],
+    ["scanInterval", 5]
+]];
+
+missionNamespace setVariable ["ON_enemyAlertZones", [
+    /*
+    ["AFR_NORTH_PERIMETER", "ON_ALERT_NORTH", 1200, "SUSPICIOUS"],
+    ["AFR_COMMAND_AREA", "ON_ALERT_COMMAND", 900, "ALERTED"],
+    ["AFR_INNER_DEFENSE", "ON_ALERT_INNER", 500, "ENGAGED"]
+    */
+]];
+
+/*
+    DYNAMIC REINFORCEMENTS.
+
+    Row format:
+      [id, side, [unitClassnameKey, ...], spawnMarker, [waypointMarker, ...],
+       triggerType, triggerValue, initialDelaySeconds, maxWaves, waveIntervalSeconds]
+
+    ALERT_LEVEL: triggerValue is SUSPICIOUS / ALERTED / ENGAGED.
+    PHASE: triggerValue is a mission phase such as IN_FLIGHT.
+    PLAYER_RADIUS: triggerValue is [existingMarker, radiusMetres].
+
+    Empty waypoint list creates a garrison wave. One or more route markers
+    creates a moving QRF-style wave. Every wave is spawned at an offset from
+    the previous wave so multiple waves do not occupy the same coordinates.
+    Keep this list empty until you configure the exact classnames and markers.
+*/
+missionNamespace setVariable ["ON_reinforcementDefinitions", [
+    /*
+    ["AFR_ALERT_REACTION", east,
+        ["AFR_RIFLEMAN", "AFR_RIFLEMAN", "AFR_AT", "AFR_MG"],
+        "ON_SPAWN_AFR_REINFORCEMENT",
+        ["ON_AFR_REINFORCEMENT_ROUTE_01", "ON_AFR_REINFORCEMENT_ROUTE_02"],
+        "ALERT_LEVEL", "ALERTED", 90, 2, 180],
+
+    ["AFR_CAS_RESPONSE", east,
+        ["AFR_RIFLEMAN", "AFR_RIFLEMAN", "AFR_MG"],
+        "ON_SPAWN_AFR_CAS_RESPONSE", [],
+        "PHASE", "IN_FLIGHT", 120, 1, 60]
+    */
+]];
+
+/*
+    ADVANCED CONVOY CONFIGURATION.
+
+    Backward-compatible core fields:
+      [id, [vehicleClassnameKey, ...], [routeMarker, ...], side]
+
+    Optional fields:
+      escortCount, [checkpointMarker, ...], checkpointPauseSeconds,
+      reactionMode, damageThreshold, speedMode, behaviour
+
+    The last escortCount vehicles in classname order are tagged ESCORT;
+    preceding vehicles are tagged TRANSPORT. All vehicles share the configured
+    route. Checkpoint markers must also appear in routeMarkers.
+    reactionMode: CONTINUE / HALT_ON_DAMAGE / HALT_ON_LOSS.
+    speedMode: LIMITED / NORMAL / FULL / (or another valid engine speed mode).
+    behaviour: SAFE / AWARE / COMBAT / STEALTH.
 */
 missionNamespace setVariable ["ON_convoyDefinitions", [
     ["AFR_ALPHA",
         ["AFR_CONVOY_TRUCK", "AFR_CONVOY_ESCORT_CAR"],
         ["ON_ROUTE_A_01", "ON_ROUTE_A_02", "ON_ROUTE_A_03"],
-        east
+        east,
+        1,
+        ["ON_ROUTE_A_02"],
+        15,
+        "HALT_ON_LOSS",
+        0.6,
+        "LIMITED",
+        "SAFE"
     ]
 ]];
 
