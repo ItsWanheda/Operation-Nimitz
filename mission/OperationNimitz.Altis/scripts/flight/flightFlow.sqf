@@ -22,7 +22,7 @@ _aircraft addAction [
 
         ["ON_task_briefing", "SUCCEEDED"] call ON_fnc_setTaskState;
         ["PREFLIGHT"] call ON_fnc_setPhase;
-        ["ON_task_preflight", "Inspect the aircraft using the installed mod's supported procedures. Return to the aircraft when the inspection is complete.", _target] call ON_fnc_createTask;
+        ["ON_task_preflight", "Preflight inspection", "Inspect the aircraft using the installed mod's supported procedures. Return to the aircraft when the inspection is complete.", _target] call ON_fnc_createTask;
         ["JOKER 1-1", "Preflight inspection started. Complete the checks and report when ready."] call ON_fnc_message;
     },
     nil, 1.5, true, true, "",
@@ -38,7 +38,7 @@ _aircraft addAction [
 
         ["ON_task_preflight", "SUCCEEDED"] call ON_fnc_setTaskState;
         ["STARTUP"] call ON_fnc_setPhase;
-        ["ON_task_startup", "Board the assigned aircraft, complete the mod-supported engine-start procedure and required checks, then report ready.", _target] call ON_fnc_createTask;
+        ["ON_task_startup", "Aircraft startup", "Board the assigned aircraft, complete the mod-supported engine-start procedure and required checks, then report ready.", _target] call ON_fnc_createTask;
         ["JOKER 1-1", "Preflight complete. Board the aircraft and begin the verified engine-start procedure."] call ON_fnc_message;
     },
     nil, 1.5, true, true, "",
@@ -56,7 +56,7 @@ _aircraft addAction [
 
         ["ON_task_startup", "SUCCEEDED"] call ON_fnc_setTaskState;
         ["TAXI"] call ON_fnc_setPhase;
-        ["ON_task_taxi", "Request and complete the installed carrier/aircraft mod's taxi and launch procedure. Report launch only after becoming airborne.", _target] call ON_fnc_createTask;
+        ["ON_task_taxi", "Taxi and launch", "Request and complete the installed carrier/aircraft mod's taxi and launch procedure. Report launch only after becoming airborne.", _target] call ON_fnc_createTask;
         ["NIMITZ", "Startup reported. Request taxi and launch clearance using the verified carrier procedure."] call ON_fnc_message;
     },
     nil, 1.5, true, true, "",
