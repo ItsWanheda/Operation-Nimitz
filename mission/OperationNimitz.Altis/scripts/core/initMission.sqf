@@ -32,6 +32,18 @@ ON_fnc_message = {
 ON_fnc_setPhase = {
     params [["_newPhase", "", [""]]];
     private _oldPhase = missionNamespace getVariable ["ON_phase", "UNKNOWN"];
+    private _allowedTransitions = [
+        ["BRIEFING", "PREFLIGHT"],
+        ["PREFLIGHT", "STARTUP"],
+        ["STARTUP", "TAXI"],
+        ["TAXI", "IN_FLIGHT"],
+        ["IN_FLIGHT", "RTB"],
+        ["RTB", "DEBRIEF"],
+        ["DEBRIEF", "COMPLETE"]
+    ];
+    if !([_oldPhase, _newPhase] in _allowedTransitions) exitWith {
+        [format ["Rejected invalid phase transition: %1 -> %2", _oldPhase, _newPhase]] call ON_fnc_log;
+    };
     missionNamespace setVariable ["ON_phase", _newPhase];
     [format ["Phase transition: %1 -> %2", _oldPhase, _newPhase]] call ON_fnc_log;
 };
