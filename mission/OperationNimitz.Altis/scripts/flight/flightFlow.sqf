@@ -21,7 +21,7 @@ _aircraft addAction [
         ["ON_task_preflight", "Complete the aircraft inspection using the procedures supported by the installed aircraft mod, then return here and report completion.", _target] call ON_fnc_createTask;
         ["JOKER 1-1", "Preflight inspection started. Complete your checks and report when ready."] call ON_fnc_message;
     },
-    nil, 1.5, true, true, "", "(_this distance _target) < 6"
+    nil, 1.5, true, true, "", "(_this distance _target) < 6 && (missionNamespace getVariable ['ON_phase', '']) isEqualTo 'BRIEFING'"
 ];
 
 _aircraft addAction [
@@ -34,7 +34,7 @@ _aircraft addAction [
         ["ON_task_startup", "Complete the aircraft mod's verified engine-start and required checks, then report completion.", _target] call ON_fnc_createTask;
         ["JOKER 1-1", "Preflight complete. Begin the verified engine-start procedure."] call ON_fnc_message;
     },
-    nil, 1.5, true, true, "", "(_this distance _target) < 6"
+    nil, 1.5, true, true, "", "(_this distance _target) < 6 && (missionNamespace getVariable ['ON_phase', '']) isEqualTo 'PREFLIGHT'"
 ];
 
 _aircraft addAction [
@@ -47,7 +47,7 @@ _aircraft addAction [
         ["ON_task_taxi", "Request and complete the verified carrier taxi/catapult procedure. Use the next action only after reaching the launch point.", _target] call ON_fnc_createTask;
         ["NIMITZ", "Startup complete. Request taxi and launch clearance."] call ON_fnc_message;
     },
-    nil, 1.5, true, true, "", "(_this distance _target) < 6"
+    nil, 1.5, true, true, "", "(_this distance _target) < 6 && (missionNamespace getVariable ['ON_phase', '']) isEqualTo 'STARTUP'"
 ];
 
 _aircraft addAction [
@@ -59,9 +59,10 @@ _aircraft addAction [
         ["IN_FLIGHT"] call ON_fnc_setPhase;
         ["ON_task_cap", "Join JOKER 1-2 if available and proceed to the designated CAP station. Hold the station for the required on-station period.", getMarkerPos (missionNamespace getVariable ["ON_capMarker", "ON_mrk_CAP"])] call ON_fnc_createTask;
         ["NIMITZ", "Launch reported. JOKER 1-1, proceed to the CAP station."] call ON_fnc_message;
+        [] execVM "scripts\ai\wingmanController.sqf";
         [] execVM "scripts\flight\capFlow.sqf";
     },
-    nil, 1.5, true, true, "", "(_this distance _target) < 6"
+    nil, 1.5, true, true, "", "(_this distance _target) < 6 && (missionNamespace getVariable ['ON_phase', '']) isEqualTo 'TAXI'"
 ];
 
 ["Flight progression actions installed on ON_playerAircraft."] call ON_fnc_log;
