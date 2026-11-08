@@ -54,6 +54,8 @@ private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions",
                 if (!isNull _vehicle) then {
                     _vehicle setDir (markerDir _marker);
                     createVehicleCrew _vehicle;
+                    private _crewGroup = createGroup [_side, true];
+                    (crew _vehicle) joinSilent _crewGroup;
                     _vehicle setVariable ["ON_enemyRole", _role, true];
                     _vehicle setVariable ["ON_spawnMarker", _marker, true];
                     _spawned pushBack _vehicle;
@@ -78,7 +80,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
         [format ["Convoy '%1' skipped: ID, vehicle list, or valid route markers are missing.", _convoyId]] call ON_fnc_log;
     } else {
         private _convoyVehicles = [];
-        private _convoyGroup = grpNull;
+        private _convoyGroup = createGroup [_side, true];
 
         {
             private _class = _x;
@@ -93,13 +95,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
                     createVehicleCrew _vehicle;
                     private _crew = crew _vehicle;
                     if (_crew isNotEqualTo []) then {
-                        if (isNull _convoyGroup) then {
-                            _convoyGroup = group (_crew select 0);
-                        } else {
-                            {
-                                [_x] joinSilent _convoyGroup;
-                            } forEach _crew;
-                        };
+                        _crew joinSilent _convoyGroup;
                     };
                     _vehicle setVariable ["ON_convoyId", _convoyId, true];
                     _vehicle setVariable ["ON_spawnMarker", _spawnMarker, true];
