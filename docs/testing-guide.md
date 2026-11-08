@@ -1,6 +1,6 @@
 # Operation Nimitz — Eden Setup and Test Guide
 
-This guide covers the 0.4.0-dev SQF mission framework and the manual classname deployment system.
+This guide covers the 0.5.0-dev SQF mission framework, manual classname deployment, and tactical force packages.
 
 ## Before opening the mission
 
@@ -17,7 +17,7 @@ All assets are configured in `config/assetConfig.sqf`. It contains classname key
 
 The deployment list controls where each configured classname appears. Use `UNIT` for infantry and `VEHICLE` for vehicles, aircraft, carriers and static weapons. Set `createCrew` according to whether the vehicle should create its own native crew. You can assign mission references such as `ON_carrier`, `ON_playerAircraft`, `ON_wingman`, `ON_awacs`, `ON_tanker` and `ON_deckCrew`.
 
-Every enemy deployment row should have its own marker and keep `requireUniqueMarker=true`. Convoys use separately named ordered route markers and classname keys. For the exact row format, examples and instructions for adding unlimited custom rows, see [Manual Asset and Classname Configuration](asset-classname-config.md).
+Every enemy deployment row should have its own marker and keep `requireUniqueMarker=true`. Convoys use separately named ordered route markers and classname keys. Optional group-level infantry forces are configured in `ON_forcePackages`: use `GARRISON`, `PATROL` (two or more route markers), or `QRF` (an activation marker/radius plus at least one destination waypoint). For the exact row format, examples and instructions for adding unlimited custom rows, see [Manual Asset and Classname Configuration](asset-classname-config.md).
 
 ## First-preview checklist
 
@@ -29,6 +29,10 @@ Every enemy deployment row should have its own marker and keep `requireUniqueMar
 - Confirm every infantry/vehicle deployment appears at its intended marker and on the intended side.
 - Confirm each enemy spawn is at a unique marker.
 - Confirm all convoy vehicles start at their assigned route markers and follow the ordered route.
+- Confirm GARRISON packages spawn once and remain assigned to their configured position.
+- Confirm PATROL packages spawn once and cycle through their configured route markers.
+- Confirm QRF packages do not spawn before the player enters the activation radius, then spawn at their separate spawn marker and follow their route.
+- Confirm missing force-package classnames, spawn markers, activation markers, and waypoint markers are logged and do not create partial groups.
 - Confirm the diary contains Mission, Situation, Rules of Engagement, and Communications.
 - Complete preflight, startup, taxi and launch using the actual aircraft-mod procedures.
 - Verify the CAS timer accumulates only while airborne inside the configured area.
@@ -53,6 +57,7 @@ Check the RPT for undefined variables, missing assets, invalid classnames, faile
 
 - Empty classname field, invalid classname and missing marker.
 - Duplicate enemy spawn marker and duplicate convoy route marker.
+- Force-package GARRISON/PATROL/QRF behavior, invalid class key, missing marker, and incomplete waypoint list.
 - Wrong asset type entered into a UNIT row or VEHICLE row.
 - Crew-enabled and empty vehicles; faction-correct crew verification.
 - Wingman pilot missing, pilot unable to enter aircraft, and aircraft missing.
