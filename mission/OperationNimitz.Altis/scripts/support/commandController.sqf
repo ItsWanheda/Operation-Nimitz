@@ -47,7 +47,7 @@ ON_fnc_commandRequest = {
             {
                 private _state = (_statusMap get _x) param [0, "UNKNOWN"];
                 switch (_state) do {
-                    case "STANDBY";
+                    case "STANDBY": { _pending = _pending + 1; };
                     case "DELAYING": { _pending = _pending + 1; };
                     case "ACTIVE": { _active = _active + 1; };
                     case "COMPLETE": { _complete = _complete + 1; };
