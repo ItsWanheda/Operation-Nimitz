@@ -69,6 +69,28 @@ Example:
 
 To add more infantry, tanks, cars, APCs, AA systems, artillery pieces or other assets, copy a row, give it a new ID, set its classname key and marker, and choose its side. Add new classname keys to the hashmap at the top of the file. You can create as many rows and custom keys as the scenario requires.
 
+### Example: distribute AA units across the map
+
+Give every AA deployment its own Eden marker. For example, create four markers at four different positions on Altis:
+
+- `ON_SPAWN_AFR_AA_NORTH`
+- `ON_SPAWN_AFR_AA_SOUTH`
+- `ON_SPAWN_AFR_AA_EAST`
+- `ON_SPAWN_AFR_AA_WEST`
+
+Then add one deployment row per AA vehicle:
+
+```sqf
+["AFR_AA_NORTH", "VEHICLE", "AFR_AA", "ON_SPAWN_AFR_AA_NORTH", east, true, "", "", true],
+["AFR_AA_SOUTH", "VEHICLE", "AFR_AA", "ON_SPAWN_AFR_AA_SOUTH", east, true, "", "", true],
+["AFR_AA_EAST",  "VEHICLE", "AFR_AA", "ON_SPAWN_AFR_AA_EAST",  east, true, "", "", true],
+["AFR_AA_WEST",  "VEHICLE", "AFR_AA", "ON_SPAWN_AFR_AA_WEST",  east, true, "", "", true]
+```
+
+All four vehicles use the same manually selected AA classname key, but each spawns at its own marker. Repeat this pattern for tanks, artillery, APCs, infantry, aircraft, or any other asset category. You can also assign a different classname key to each row when you want different models.
+
+**Important:** the final `true` enables the unique-marker check. Keep it enabled for individually positioned deployments so accidentally reusing a marker is caught during mission startup.
+
 ## 4. Configure convoys and routes
 
 Convoy rows use classname **keys**, not raw classnames:
