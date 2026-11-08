@@ -1,7 +1,7 @@
 /*
     Lightweight single-player sortie telemetry.
     This records mission time, airborne time, sampled vehicle travel distance,
-    maximum altitude/speed, CAP time, and mission events. It does not claim to
+    maximum altitude/speed, CAS area time, and mission events. It does not claim to
     measure fuel, stores, damage, carrier-wire engagement, or flight-data-recorder
     values from the aircraft mod.
 */
