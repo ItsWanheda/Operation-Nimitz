@@ -100,14 +100,15 @@ ON_fnc_spawnForcePackage = {
     };
 
     _group setVariable ["ON_forcePackageId", _packageId, true];
-    _group setBehaviour (if (_behavior isEqualTo "QRF") then { "AWARE" } else { "SAFE" });
-    _group setCombatMode "YELLOW";
+    _group setBehaviour (if (_behavior isEqualTo "GARRISON") then { "AWARE" } else { if (_behavior isEqualTo "QRF") then { "AWARE" } else { "SAFE" } });
+    _group setCombatMode (if (_behavior isEqualTo "GARRISON") then { "GREEN" } else { "YELLOW" });
     _group setSpeedMode (if (_behavior isEqualTo "QRF") then { "NORMAL" } else { "LIMITED" });
     _group setFormation "WEDGE";
 
     switch (_behavior) do {
         case "GARRISON": {
             {
+                doStop _x;
                 _x doWatch (getMarkerPos _spawnMarker);
                 _x setUnitPos "UP";
             } forEach _createdUnits;
