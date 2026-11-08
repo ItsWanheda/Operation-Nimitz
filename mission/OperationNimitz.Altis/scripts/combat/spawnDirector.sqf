@@ -199,5 +199,9 @@ private _usedRouteMarkers = [];
     };
 } forEach _convoys;
 
+if (isNull (missionNamespace getVariable ["ON_atc", objNull])) then {
+    missionNamespace setVariable ["ON_atc", missionNamespace getVariable ["ON_carrier", objNull]];
+};
+
 missionNamespace setVariable ["ON_spawnedAssets", _spawnedAssets];
 [format ["Manual asset deployment finished. Created %1 object(s).", count _spawnedAssets]] call ON_fnc_recordEvent;
