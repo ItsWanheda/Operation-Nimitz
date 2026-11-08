@@ -268,7 +268,7 @@ missionNamespace setVariable ["ON_reinforcementDefinitions", [
     preceding vehicles are tagged TRANSPORT. All vehicles share the configured
     route. Checkpoint markers must also appear in routeMarkers.
     reactionMode: CONTINUE / HALT_ON_DAMAGE / HALT_ON_LOSS.
-    speedMode: LIMITED / NORMAL / FULL / (or another valid engine speed mode).
+    speedMode: LIMITED / NORMAL / FULL.
     behaviour: SAFE / AWARE / COMBAT / STEALTH.
 */
 missionNamespace setVariable ["ON_convoyDefinitions", [
