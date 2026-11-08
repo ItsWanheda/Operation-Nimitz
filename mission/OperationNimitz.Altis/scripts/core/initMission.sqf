@@ -228,6 +228,7 @@ ON_fnc_validateSetup = {
 };
 
 call compile preprocessFileLineNumbers "scripts\combat\spawnDirector.sqf";
+[] execVM "scripts\combat\forcePackageController.sqf";
 
 [] execVM "scripts\briefing\initBriefing.sqf";
 [] execVM "scripts\flight\flightFlow.sqf";
