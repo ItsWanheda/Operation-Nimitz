@@ -10,7 +10,7 @@ The intended first sortie is a Combat Air Patrol (CAP): ready-room briefing, fli
 
 ## Project status
 
-The repository is initialized. Mission requirements, verified mod dependencies, asset/classname records, implementation phases, and acceptance criteria are tracked in the [mission-building checklist](docs/mission-building-checklist.md).
+The repository is initialized. Mission requirements, dependency references, asset/classname verification, implementation phases, and acceptance criteria are tracked in the [mission-building checklist](docs/mission-building-checklist.md).
 
 > **Verification rule:** Do not assume Workshop assets, classnames, mod features, carrier procedures, or compatibility. Record them as pending confirmation until tested in the installed ARMA 3 environment.
 
@@ -20,7 +20,7 @@ The repository is initialized. Mission requirements, verified mod dependencies, 
 |---|---:|---|
 | F/A-18E Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified; exact classnames and capabilities pending in-game verification |
 | USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified; required assets and classnames pending in-game verification |
-| USS Nimitz carrier | Not yet identified | Pending selection and compatibility verification |
+| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) | Identified; Steam listing currently shows removed/incompatible notices; installability and compatibility pending verification |
 
 ## Development approach
 
