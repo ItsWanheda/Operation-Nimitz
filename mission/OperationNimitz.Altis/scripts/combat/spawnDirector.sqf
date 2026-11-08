@@ -30,6 +30,7 @@ if (missionNamespace getVariable ["ON_enemyDirectorStarted", false]) exitWith {
 missionNamespace setVariable ["ON_enemyDirectorStarted", true];
 
 private _spawned = [];
+private _usedSpawnMarkers = [];
 private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions", []];
 
 {
@@ -46,6 +47,10 @@ private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions",
         if (_marker isEqualTo "" || { !(_marker in allMapMarkers) }) then {
             [format ["Enemy %1 spawn skipped; marker '%2' is missing.", _role, _marker]] call ON_fnc_log;
         } else {
+            if (_marker in _usedSpawnMarkers) then {
+                [format ["Enemy spawn skipped; marker '%1' is already assigned to another element.", _marker]] call ON_fnc_log;
+            } else {
+                _usedSpawnMarkers pushBack _marker;
             if (_class isEqualTo "" || { !isClass (configFile >> "CfgVehicles" >> _class) }) then {
                 [format ["Enemy %1 spawn skipped; vehicle classname '%2' is invalid or unset.", _role, _class]] call ON_fnc_log;
             } else {
@@ -62,6 +67,7 @@ private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions",
                     [format ["Spawned %1 asset '%2' at marker '%3'.", _role, _class, _marker]] call ON_fnc_recordEvent;
                 };
             };
+            };
         };
     };
 } forEach _definitions;
@@ -76,8 +82,8 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
     ];
 
     private _validRoute = _routeMarkers select { _x in allMapMarkers };
-    if (_convoyId isEqualTo "" || { _classes isEqualTo [] } || { _validRoute isEqualTo [] }) then {
-        [format ["Convoy '%1' skipped: ID, vehicle list, or valid route markers are missing.", _convoyId]] call ON_fnc_log;
+    if (_convoyId isEqualTo "" || { _classes isEqualTo [] } || { (count _validRoute) < (count _classes) }) then {
+        [format ["Convoy '%1' skipped: ID, vehicle list, or enough valid route markers are missing.", _convoyId]] call ON_fnc_log;
     } else {
         private _convoyVehicles = [];
         private _convoyGroup = createGroup [_side, true];
