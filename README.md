@@ -10,7 +10,7 @@ The intended first sortie is a Close Air Support (CAS): ready-room briefing, fli
 
 ## Project status
 
-The repository contains the initial SQF mission framework, currently at **0.5.0-dev** on the feature branch. Implemented mission logic includes phase-gated flight progression, AI wingman follow/hold-fire behavior, CAS area timing and marker-driven enemy deployment, configurable infantry garrisons/patrols/proximity-triggered QRF groups, player-confirmed contact identification and ROE, optional scripted support status calls, sampled sortie telemetry, setup validation, and a debrief summary.
+The repository contains the modular SQF mission framework, currently at **0.6.0-dev** on the feature branch. Implemented mission logic includes phase-gated flight progression, AI wingman follow/hold-fire behavior, CAS area timing and marker-driven enemy deployment, configurable infantry garrisons/patrols/QRF groups, AI-knowledge and map-zone enemy alert escalation, phase/alert/proximity-triggered reinforcement waves, transport/escort convoy roles with checkpoints and damage/loss reactions, operational command status requests, player-confirmed contact identification and ROE, optional scripted support status calls, sampled sortie telemetry, setup validation, and a debrief summary.
 
 **This is not yet a playable/exported mission.** An Eden-generated mission.sqm, verified editor assets/classnames, and in-game RPT testing are still required.
 
