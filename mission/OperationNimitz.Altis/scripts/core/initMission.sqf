@@ -4,7 +4,7 @@
 */
 waitUntil { time > 0 && { !isNull player } };
 
-missionNamespace setVariable ["ON_version", "0.5.0-dev"];
+missionNamespace setVariable ["ON_version", "0.6.0-dev"];
 missionNamespace setVariable ["ON_phase", "BRIEFING"];
 missionNamespace setVariable ["ON_missionResult", "UNSET"];
 missionNamespace setVariable ["ON_terminalPhase", "BRIEFING"];
@@ -22,6 +22,19 @@ missionNamespace setVariable ["ON_enemySide", missionNamespace getVariable ["ON_
 missionNamespace setVariable ["ON_assetClassnames", missionNamespace getVariable ["ON_assetClassnames", createHashMap]];
 missionNamespace setVariable ["ON_assetDeployments", missionNamespace getVariable ["ON_assetDeployments", []]];
 missionNamespace setVariable ["ON_convoyDefinitions", missionNamespace getVariable ["ON_convoyDefinitions", []]];
+missionNamespace setVariable ["ON_forcePackages", missionNamespace getVariable ["ON_forcePackages", []]];
+missionNamespace setVariable ["ON_enemyAlertSettings", missionNamespace getVariable ["ON_enemyAlertSettings", createHashMap]];
+missionNamespace setVariable ["ON_enemyAlertZones", missionNamespace getVariable ["ON_enemyAlertZones", []]];
+missionNamespace setVariable ["ON_reinforcementDefinitions", missionNamespace getVariable ["ON_reinforcementDefinitions", []]];
+missionNamespace setVariable ["ON_reinforcementStatus", createHashMap];
+missionNamespace setVariable ["ON_reinforcementGroups", []];
+missionNamespace setVariable ["ON_enemyAlertControllerReady", false];
+missionNamespace setVariable ["ON_enemyAlertLevel", "QUIET"];
+missionNamespace setVariable ["ON_enemyAlertRank", 0];
+missionNamespace setVariable ["ON_enemyKnownUnitCount", 0];
+missionNamespace setVariable ["ON_convoyRecords", []];
+missionNamespace setVariable ["ON_convoyStatus", createHashMap];
+missionNamespace setVariable ["ON_convoyDirectorReady", false];
 missionNamespace setVariable ["ON_metricCasTime", 0];
 missionNamespace setVariable ["ON_capRadius", 1200];
 missionNamespace setVariable ["ON_capDuration", 120];
@@ -229,12 +242,16 @@ ON_fnc_validateSetup = {
 
 call compile preprocessFileLineNumbers "scripts\combat\spawnDirector.sqf";
 [] execVM "scripts\combat\forcePackageController.sqf";
+[] execVM "scripts\combat\alertController.sqf";
+[] execVM "scripts\combat\reinforcementController.sqf";
+[] execVM "scripts\combat\convoyController.sqf";
 
 [] execVM "scripts\briefing\initBriefing.sqf";
 [] execVM "scripts\flight\flightFlow.sqf";
 [] execVM "scripts\combat\contactFramework.sqf";
 [] execVM "scripts\support\supportController.sqf";
+[] execVM "scripts\support\commandController.sqf";
 [] execVM "scripts\core\telemetry.sqf";
 
 [] call ON_fnc_validateSetup;
-["Mission framework 0.5.0-dev initialized."] call ON_fnc_recordEvent;
+["Mission framework 0.6.0-dev initialized."] call ON_fnc_recordEvent;
