@@ -61,9 +61,10 @@ if ((missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT" && { _
             params ["_target", "_caller", "_actionId"];
             private _targetPos = getMarkerPos (missionNamespace getVariable ["ON_casTargetMarker", "ON_mrk_CAS_TARGET"]);
             private _radius = missionNamespace getVariable ["ON_casTargetRadius", 500];
+            private _enemySide = missionNamespace getVariable ["ON_enemySide", east];
             private _remaining = allUnits select {
                 alive _x
-                && { side group _x isEqualTo east }
+                && { side group _x isEqualTo _enemySide }
                 && { (_x distance2D _targetPos) <= _radius }
             };
             if (_remaining isNotEqualTo []) exitWith {
