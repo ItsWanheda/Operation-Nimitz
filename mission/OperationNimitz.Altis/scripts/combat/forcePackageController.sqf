@@ -34,9 +34,8 @@ ON_fnc_spawnForcePackage = {
         ["_waypointMarkers", [], [[]]]
     ];
 
-    private _classes = _classKeys apply {
-        missionNamespace getVariable ["ON_assetClassnames", createHashMap] getOrDefault [_x, ""]
-    };
+    private _assetClassMap = missionNamespace getVariable ["ON_assetClassnames", createHashMap];
+    private _classes = _classKeys apply { _assetClassMap getOrDefault [_x, ""] };
 
     if (_packageId isEqualTo "" || { _classes isEqualTo [] }) exitWith {
         [format ["Force package '%1' rejected: ID or unit list is empty.", _packageId]] call ON_fnc_log;
@@ -63,6 +62,10 @@ ON_fnc_spawnForcePackage = {
 
     if (_behavior isEqualTo "PATROL" && { (count _waypointMarkers) < 2 }) exitWith {
         [format ["Force package '%1' rejected: PATROL requires at least two waypoint markers.", _packageId]] call ON_fnc_log;
+        grpNull
+    };
+    if (_behavior isEqualTo "QRF" && { (count _waypointMarkers) < 1 }) exitWith {
+        [format ["Force package '%1' rejected: QRF requires at least one destination waypoint.", _packageId]] call ON_fnc_log;
         grpNull
     };
 
@@ -110,20 +113,27 @@ ON_fnc_spawnForcePackage = {
             } forEach _createdUnits;
         };
 
-        case "PATROL";
+        case "PATROL": {
+            {
+                private _waypoint = _group addWaypoint [getMarkerPos _x, 0];
+                _waypoint setWaypointType "MOVE";
+                _waypoint setWaypointSpeed "LIMITED";
+                _waypoint setWaypointBehaviour "SAFE";
+                _waypoint setWaypointCompletionRadius 15;
+            } forEach _waypointMarkers;
+
+            private _cycle = _group addWaypoint [getMarkerPos (_waypointMarkers select 0), 0];
+            _cycle setWaypointType "CYCLE";
+        };
+
         case "QRF": {
             {
                 private _waypoint = _group addWaypoint [getMarkerPos _x, 0];
                 _waypoint setWaypointType "MOVE";
-                _waypoint setWaypointSpeed (if (_behavior isEqualTo "QRF") then { "NORMAL" } else { "LIMITED" });
-                _waypoint setWaypointBehaviour (if (_behavior isEqualTo "QRF") then { "AWARE" } else { "SAFE" });
+                _waypoint setWaypointSpeed "NORMAL";
+                _waypoint setWaypointBehaviour "AWARE";
                 _waypoint setWaypointCompletionRadius 15;
             } forEach _waypointMarkers;
-
-            if (_behavior isEqualTo "PATROL") then {
-                private _cycle = _group addWaypoint [getMarkerPos (_waypointMarkers select 0), 0];
-                _cycle setWaypointType "CYCLE";
-            };
         };
     };
 
