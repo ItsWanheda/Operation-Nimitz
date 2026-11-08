@@ -24,6 +24,9 @@
 */
 
 missionNamespace setVariable ["ON_assetClassnames", createHashMapFromArray [
+    // PLAYABLE EDEN UNIT — match this to the player unit class selected in Eden.
+    ["PLAYER_UNIT", ""],
+
     // CARRIER AND PRIMARY FLIGHT
     ["USS_NIMITZ", ""],
     ["PLAYER_F18F", ""],
