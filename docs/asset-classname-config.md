@@ -129,7 +129,7 @@ The optional fields, in order, are:
 - `checkpointPauseSeconds`: deterministic pause duration at each configured checkpoint.
 - `reactionMode`: `CONTINUE`, `HALT_ON_DAMAGE`, or `HALT_ON_LOSS`.
 - `damageThreshold`: damage value from 0.0 to 1.0 used by `HALT_ON_DAMAGE`.
-- `speedMode`: `LIMITED`, `NORMAL`, or `FULL`.
+- `speedMode`: `LIMITED`, `NORMAL`, or `FULL` (the values accepted by this controller).
 - `behaviour`: `SAFE`, `AWARE`, `COMBAT`, or `STEALTH`.
 
 Create at least one route marker per convoy vehicle. Each vehicle starts at its corresponding marker; the group follows the remaining route markers in order and cycles back to the first marker. Checkpoint markers must also be included in the convoy route. Route markers must exist, must not repeat, and must not be reused by another convoy.
