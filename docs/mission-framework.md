@@ -1,6 +1,6 @@
 # Operation Nimitz — Mission Framework
 
-**Status:** 0.4.0-dev mission-system foundation; not yet a playable/exported mission.  
+**Status:** 0.5.0-dev mission-system expansion; not yet a playable/exported mission.  
 **Mission folder:** mission/OperationNimitz.Altis  
 **Active implementation branch:** feat/mission-system-foundation
 
@@ -12,6 +12,7 @@ This milestone provides the mission flow and a generic classname-driven deployme
 - Central manual classname map (including the playable player-unit classname check) and marker-driven spawner for individual units, vehicles, aircraft, carriers and static weapons.
 - Optional native vehicle crew creation and separately configured pilot seating.
 - Marker-unique deployment checks for individual assets.
+- Tactical force packages for manually configured infantry groups: immediate garrisons, waypoint patrols, and proximity-triggered QRF/reinforcement groups.
 - Convoy spawning through classname keys and ordered, unique route-marker lists.
 - Diary briefing and ready-room-to-aircraft progression.
 - Phase-gated preflight, engine-start, taxi, and launch confirmation actions.
@@ -35,6 +36,8 @@ The hashmap provides separate keys for:
 - Convoy trucks, escort vehicles and optional custom mod assets.
 
 Enter the exact classname into the desired key. Then add one row to `ON_assetDeployments` with its type, classname key, marker, side, crew behavior, optional mission reference and unique-marker setting. Empty classname keys disable their rows.
+
+For group-level infantry behavior, configure `ON_forcePackages` in the same file. Each package lists its own unit classname keys, spawn marker, behavior, and optional waypoint/activation markers. `GARRISON` holds a position, `PATROL` cycles through at least two route markers, and `QRF` remains unspawned until the player enters its configured activation radius. See the commented examples in `assetConfig.sqf`.
 
 The director supports:
 - `UNIT`: one infantry/man unit.
@@ -60,6 +63,8 @@ Other current limits:
 - The contact detector is a distance gate, not radar, AWACS sensor fusion, or visual line-of-sight simulation.
 - Hostile declaration depends on manually verified metadata and player confirmation.
 - Wingman behavior is basic AI follow/formation control.
+- Force packages use standard group waypoints and basic AI behavior; they do not provide advanced tactical coordination, suppression doctrine, dynamic threat assessment, or guaranteed pathfinding.
+- QRF activation is based on player proximity to a configured marker, not enemy radio detection or a simulated command network.
 - Convoy logic follows configured waypoints; it does not provide tactical reactions, damage response, ambush behavior or infantry dismounts.
 - Recovery proximity is not proof of arrested landing or hook/cable engagement.
 - No ARMA 3 runtime test has been performed in this environment.
