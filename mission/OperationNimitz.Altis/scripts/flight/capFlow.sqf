@@ -75,7 +75,7 @@ while {
 if (_capComplete && { (missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT" }) then {
     ["ON_task_cap", "SUCCEEDED"] call ON_fnc_setTaskState;
     ["RTB"] call ON_fnc_setPhase;
-    ["ON_task_rtb", "Return to the carrier, recover in the assigned aircraft, shut down, and proceed to the debrief station."] call ON_fnc_createTask;
+    ["ON_task_rtb", "Return to carrier", "Return to the carrier, recover in the assigned aircraft, shut down, and proceed to the debrief station.", missionNamespace getVariable ["ON_carrier", objNull]] call ON_fnc_createTask;
     ["NIMITZ", "CAP and contact tasking complete. JOKER 1-1, proceed RTB."] call ON_fnc_message;
     [] execVM "scripts\carrier\recoveryFlow.sqf";
 };
