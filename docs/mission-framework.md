@@ -1,6 +1,6 @@
 # Operation Nimitz — Mission Framework
 
-**Status:** 0.5.0-dev mission-system expansion; not yet a playable/exported mission.  
+**Status:** 0.6.0-dev mission-system expansion; not yet a playable/exported mission.  
 **Mission folder:** mission/OperationNimitz.Altis  
 **Active implementation branch:** feat/mission-system-foundation
 
@@ -12,7 +12,11 @@ This milestone provides the mission flow and a generic classname-driven deployme
 - Central manual classname map (including the playable player-unit classname check) and marker-driven spawner for individual units, vehicles, aircraft, carriers and static weapons.
 - Optional native vehicle crew creation and separately configured pilot seating.
 - Marker-unique deployment checks for individual assets.
-- Tactical force packages for manually configured infantry groups: immediate garrisons, waypoint patrols, and proximity-triggered QRF/reinforcement groups.
+- Tactical force packages for manually configured infantry groups: immediate garrisons, waypoint patrols, and proximity-triggered QRF groups.
+- Enemy intelligence and alert escalation based on ARMA AI `knowsAbout` values plus optional manually placed proximity alert zones.
+- Dynamic reinforcement schedules triggered by alert level, mission phase, or player/aircraft proximity; delayed and repeated waves use the shared classname-driven spawner.
+- Operational command requests for mission SITREP, threat state, reinforcement state, convoy state, and phase-based tasking.
+- Advanced convoy configuration with transport/escort role tags, timed route checkpoints, configurable speed/behaviour, and continue/halt-on-damage/halt-on-loss reactions.
 - Convoy spawning through classname keys and ordered, unique route-marker lists.
 - Diary briefing and ready-room-to-aircraft progression.
 - Phase-gated preflight, engine-start, taxi, and launch confirmation actions.
@@ -46,7 +50,9 @@ The director supports:
 - `driverVehicleVariable`: optionally seats a separately configured unit in a previously spawned vehicle's driver seat.
 - `missionVariable`: exposes the spawned object through a missionNamespace reference used by the framework.
 
-Convoy definitions reference classname keys and ordered route marker names. Each convoy requires at least as many unique route markers as vehicles. Static enemy spawn rows should use a unique marker for every element.
+Convoy definitions reference classname keys and ordered route marker names. Each convoy requires at least as many unique route markers as vehicles. Optional fields configure escort tags, checkpoint pauses, speed/behaviour and damage/loss reactions. Static enemy spawn rows should use a unique marker for every element.
+
+Enemy alert settings and optional alert zones are configured through `ON_enemyAlertSettings` and `ON_enemyAlertZones`. Reinforcement schedules are configured through `ON_reinforcementDefinitions`; they are empty by default. See the manual configuration guide for the exact row schemas and trigger types.
 
 See [Manual Asset and Classname Configuration](asset-classname-config.md) for the complete schema and examples.
 
@@ -61,11 +67,14 @@ The USS Nimitz Workshop listing's installability/compatibility status remains un
 Other current limits:
 - Player confirmation actions are not aircraft-system simulations.
 - The contact detector is a distance gate, not radar, AWACS sensor fusion, or visual line-of-sight simulation.
+- Enemy alert escalation samples engine AI knowledge (`knowsAbout`) and optional proximity zones. It does not simulate radar coverage, communications interception, alert decay, or sensor fusion.
+- Reinforcement triggers use configured mission phase, alert state, or player proximity; there is no simulated enemy command network or tactical pathfinding guarantee.
+- Operational command entries are contextual `addAction`/systemChat reports, not a radio-frequency, voice, or crew communications simulation.
 - Hostile declaration depends on manually verified metadata and player confirmation.
 - Wingman behavior is basic AI follow/formation control.
 - Force packages use standard group waypoints and basic AI behavior; they do not provide advanced tactical coordination, suppression doctrine, dynamic threat assessment, or guaranteed pathfinding.
 - QRF activation is based on player proximity to a configured marker, not enemy radio detection or a simulated command network.
-- Convoy logic follows configured waypoints; it does not provide tactical reactions, damage response, ambush behavior or infantry dismounts.
+- Convoy escort roles are configuration tags within a shared convoy group. Checkpoints use waypoint timeouts, and selectable damage/loss reactions can halt the convoy; this does not provide advanced escort tactics, ambush behavior, infantry dismounts, or threat-aware rerouting.
 - Recovery proximity is not proof of arrested landing or hook/cable engagement.
 - No ARMA 3 runtime test has been performed in this environment.
 
