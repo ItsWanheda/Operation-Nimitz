@@ -1,8 +1,9 @@
 /*
     CAP station monitor.
     Requires an Eden marker named ON_mrk_CAP. Time on station is accumulated
-    while airborne and within the configured radius. If a scripted contact is
-    still unresolved when the CAP timer is met, the flight remains on station.
+    while airborne and within the configured radius. Once the timer is met it
+    remains satisfied; if a scripted contact is unresolved, RTB is held while
+    the player completes contact handling.
 */
 waitUntil { !isNil "ON_fnc_setPhase" };
 
@@ -16,6 +17,7 @@ private _radius = missionNamespace getVariable ["ON_capRadius", 1200];
 private _requiredTime = missionNamespace getVariable ["ON_capDuration", 120];
 private _stationTime = 0;
 private _announced = false;
+private _capTimerSatisfied = false;
 private _capComplete = false;
 private _contactHoldAnnounced = false;
 
@@ -23,30 +25,37 @@ while {
     (missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT"
     && { !_capComplete }
 } do {
-    private _aircraft = vehicle player;
-    private _insideStation = (
-        player isNotEqualTo _aircraft
-        && { alive _aircraft }
-        && { !(isTouchingGround _aircraft) }
-        && { (getPosATL _aircraft select 2) > 50 }
-        && { (_aircraft distance2D (getMarkerPos _marker)) <= _radius }
-    );
+    if (!_capTimerSatisfied) then {
+        private _aircraft = vehicle player;
+        private _insideStation = (
+            player isNotEqualTo _aircraft
+            && { alive _aircraft }
+            && { !(isTouchingGround _aircraft) }
+            && { (getPosATL _aircraft select 2) > 50 }
+            && { (_aircraft distance2D (getMarkerPos _marker)) <= _radius }
+        );
 
-    if (_insideStation) then {
-        _stationTime = _stationTime + 5;
+        if (_insideStation) then {
+            _stationTime = _stationTime + 5;
+
+            if (!_announced) then {
+                _announced = true;
+                ["AWACS", "JOKER 1-1, CAP station reached. Maintain the assigned patrol area."] call ON_fnc_message;
+            };
+        } else {
+            _stationTime = 0;
+            _announced = false;
+        };
+
         missionNamespace setVariable ["ON_metricCapTime", _stationTime];
 
-        if (!_announced) then {
-            _announced = true;
-            ["AWACS", "JOKER 1-1, CAP station reached. Maintain the assigned patrol area."] call ON_fnc_message;
+        if (_stationTime >= _requiredTime) then {
+            _capTimerSatisfied = true;
+            ["CAP on-station timer satisfied."] call ON_fnc_recordEvent;
         };
-    } else {
-        _stationTime = 0;
-        missionNamespace setVariable ["ON_metricCapTime", 0];
-        _announced = false;
     };
 
-    if (_stationTime >= _requiredTime) then {
+    if (_capTimerSatisfied) then {
         private _contactStatus = missionNamespace getVariable ["ON_contactStatus", "NONE"];
         private _contactPending = _contactStatus in ["UNKNOWN", "IDENTIFIED", "HOSTILE_CONFIRMED"];
 
@@ -55,7 +64,7 @@ while {
         } else {
             if (!_contactHoldAnnounced) then {
                 _contactHoldAnnounced = true;
-                ["AWACS", "CAP timer satisfied. An active contact remains unresolved; remain on station and complete contact handling."] call ON_fnc_message;
+                ["AWACS", "CAP timer satisfied. An active contact remains unresolved; complete contact handling before RTB."] call ON_fnc_message;
             };
         };
     };
