@@ -10,7 +10,7 @@ if (isNull _carrier) exitWith {
     ["Cannot install debrief action: ON_carrier is missing."] call ON_fnc_log;
 };
 
-["ON_task_debrief", "Shut down the aircraft, leave the cockpit, and complete the post-flight debrief at the carrier."] call ON_fnc_createTask;
+["ON_task_debrief", "Post-flight debrief", "Shut down the aircraft, leave the cockpit, and complete the post-flight debrief at the carrier.", _carrier] call ON_fnc_createTask;
 
 _carrier addAction [
     "<t color='#B6FF00'>Complete post-flight debrief</t>",
