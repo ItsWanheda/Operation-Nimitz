@@ -91,9 +91,9 @@ All four vehicles use the same manually selected AA classname key, but each spaw
 
 **Important:** the final `true` enables the unique-marker check. Keep it enabled for individually positioned deployments so accidentally reusing a marker is caught during mission startup.
 
-## 4. Configure convoys and routes
+## 4. Configure advanced convoys and routes
 
-Convoy rows use classname **keys**, not raw classnames:
+Convoy rows use classname **keys**, not raw classnames. The original four-column format remains valid:
 
 ```sqf
 [
@@ -104,9 +104,91 @@ Convoy rows use classname **keys**, not raw classnames:
 ]
 ```
 
-Create at least one route marker per convoy vehicle. Each vehicle starts at its corresponding route marker; the convoy then follows the remaining route markers in order and cycles back to the first marker. A route must contain existing marker names, must not repeat a marker, and must not reuse another convoy's route. Every referenced classname key must resolve to a valid class.
+The extended format adds optional convoy behavior:
 
-## 5. Add custom mod assets
+```sqf
+[
+    "AFR_BRAVO",
+    ["AFR_CONVOY_TRUCK", "AFR_CONVOY_ESCORT_APC"],
+    ["ON_ROUTE_B_01", "ON_ROUTE_B_02", "ON_ROUTE_B_03"],
+    east,
+    1,
+    ["ON_ROUTE_B_02"],
+    20,
+    "HALT_ON_LOSS",
+    0.6,
+    "LIMITED",
+    "SAFE"
+]
+```
+
+The optional fields, in order, are:
+
+- `escortCount`: number of final vehicles in classname order tagged as `ESCORT`. Earlier vehicles are tagged `TRANSPORT`. Set this to zero when no vehicle should be designated as escort.
+- `checkpointMarkers`: existing route markers that should pause the convoy.
+- `checkpointPauseSeconds`: deterministic pause duration at each configured checkpoint.
+- `reactionMode`: `CONTINUE`, `HALT_ON_DAMAGE`, or `HALT_ON_LOSS`.
+- `damageThreshold`: damage value from 0.0 to 1.0 used by `HALT_ON_DAMAGE`.
+- `speedMode`: `LIMITED`, `NORMAL`, or `FULL`.
+- `behaviour`: `SAFE`, `AWARE`, `COMBAT`, or `STEALTH`.
+
+Create at least one route marker per convoy vehicle. Each vehicle starts at its corresponding marker; the group follows the remaining route markers in order and cycles back to the first marker. Checkpoint markers must also be included in the convoy route. Route markers must exist, must not repeat, and must not be reused by another convoy.
+
+Escort assignment is a role tag and convoy formation setting; it does not create independent escort tactics, threat detection, or guaranteed protective positioning. Checkpoint waits use waypoint timeouts. Damage/loss reactions are monitored by the convoy controller and can halt the remaining group according to the selected mode.
+
+## 5. Configure enemy alert zones
+
+The alert system monitors the ARMA AI `knowsAbout` value for living units on the configured hostile side. It escalates through:
+
+- `QUIET`: no configured threshold has been reached.
+- `SUSPICIOUS`: one or more hostile AI units have partial knowledge, or the player enters a configured zone.
+- `ALERTED`: hostile knowledge or a zone has reached the alert threshold.
+- `ENGAGED`: hostile knowledge or a zone has reached the highest threshold.
+
+Adjust the `ON_enemyAlertSettings` hashmap in `assetConfig.sqf` to set the side, knowledge thresholds, scan interval, and enable/disable state. Optional zone rows use:
+
+```sqf
+[id, marker, radiusMetres, minimumAlertLevel]
+```
+
+Example (commented out in the default configuration):
+
+```sqf
+["AFR_NORTH_PERIMETER", "ON_ALERT_NORTH", 1200, "SUSPICIOUS"]
+```
+
+Place each marker in Eden before enabling its row. Alert states only escalate during the sortie; this simple controller does not model alert decay, a radar picture, radio interception, or sensor fusion.
+
+## 6. Configure dynamic reinforcement waves
+
+Reinforcement rows use:
+
+```sqf
+[id, side, [classnameKey, ...], spawnMarker, [waypointMarker, ...],
+ triggerType, triggerValue, initialDelaySeconds, maxWaves, waveIntervalSeconds]
+```
+
+Supported triggers:
+
+- `ALERT_LEVEL`: start when the enemy alert reaches `SUSPICIOUS`, `ALERTED`, or `ENGAGED`.
+- `PHASE`: start when the mission enters a named phase such as `IN_FLIGHT`.
+- `PLAYER_RADIUS`: start when the player/assigned aircraft enters `[marker, radiusMetres]`.
+
+An empty waypoint list creates a garrison wave. One or more waypoint markers create a moving QRF-style wave. Each later wave is offset from the previous wave's spawn area. The controller attempts to spawn up to `maxWaves`, waiting for `waveIntervalSeconds` between waves. It uses the same manually configured classname keys as the force-package system. No reinforcement definitions are active by default; uncomment and configure only after placing all markers and checking classnames.
+
+## 7. Operational command requests
+
+The assigned aircraft receives contextual radio-style actions for:
+
+- Mission SITREP (phase, aircraft state, flight/CAS time and alert level).
+- Enemy threat report (alert level and AI-known hostile count).
+- Reinforcement schedule state.
+- Convoy vehicle health and reaction state.
+- Current phase-based tasking.
+
+These are scripted `addAction` reports using systemChat. They are not a simulated radio network, voice comms, or real AWACS radar data.
+
+## 8. Add custom mod assets
 
 Add a new key to `ON_assetClassnames`:
 
@@ -123,7 +205,7 @@ Then add a deployment row:
 
 The same process works for a man unit by changing the row type to `UNIT`. This keeps mod-specific classnames out of the mission logic.
 
-## 6. Startup and validation
+## 9. Startup and validation
 
 `mission/OperationNimitz.Altis/init.sqf` loads `config/assetConfig.sqf` before the core mission system. The asset director runs before mandatory setup validation, so configured carrier and player-aircraft references are available to the framework.
 
