@@ -129,6 +129,7 @@ if (_expectedPlayerClass isNotEqualTo "") then {
 // -----------------------------------------------------------------------------
 private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
 private _usedRouteMarkers = [];
+private _usedConvoyIds = [];
 private _convoyRecords = [];
 
 {
@@ -145,6 +146,11 @@ private _convoyRecords = [];
         ["_speedMode", "LIMITED", [""]],
         ["_behaviour", "SAFE", [""]]
     ];
+
+    private _duplicateConvoyId = _convoyId in _usedConvoyIds;
+    if (_convoyId isNotEqualTo "" && { !_duplicateConvoyId }) then {
+        _usedConvoyIds pushBack _convoyId;
+    };
 
     private _resolvedClasses = _classKeys apply { _classMap getOrDefault [_x, ""] };
     private _markersExist = (_routeMarkers findIf { !(_x in allMapMarkers) }) isEqualTo -1;
@@ -167,6 +173,7 @@ private _convoyRecords = [];
 
     if (
         _convoyId isEqualTo ""
+        || { _duplicateConvoyId }
         || { !_classesValid }
         || { !_markersExist }
         || { !_markersUnique }
@@ -181,7 +188,7 @@ private _convoyRecords = [];
         || { !_pauseValid }
     ) then {
         [format [
-            "Convoy '%1' skipped. Check classname keys, route/spawn markers, escort count, checkpoint subset, reaction mode, speed/behaviour, and damage threshold.",
+            "Convoy '%1' skipped. Check unique ID, classname keys, route/spawn markers, escort count, checkpoint subset, reaction mode, speed/behaviour, and damage threshold.",
             _convoyId
         ]] call ON_fnc_log;
     } else {
