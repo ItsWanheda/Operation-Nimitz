@@ -132,7 +132,7 @@ The optional fields, in order, are:
 - `speedMode`: `LIMITED`, `NORMAL`, or `FULL` (the values accepted by this controller).
 - `behaviour`: `SAFE`, `AWARE`, `COMBAT`, or `STEALTH`.
 
-Create at least one route marker per convoy vehicle. Each vehicle starts at its corresponding marker; the group follows the remaining route markers in order and cycles back to the first marker. Checkpoint markers must also be included in the convoy route. Route markers must exist, must not repeat, and must not be reused by another convoy.
+Create at least one route marker per convoy vehicle. Each vehicle starts at its corresponding marker; the group follows the remaining route markers in order and cycles back to the first marker. Checkpoint markers must be among the active route waypoints after the initial spawn marker; a marker used only as the first spawn position cannot act as a checkpoint. Route markers must exist, must not repeat, and must not be reused by another convoy.
 
 Escort assignment is a role tag and convoy formation setting; it does not create independent escort tactics, threat detection, or guaranteed protective positioning. Checkpoint waits use waypoint timeouts. Damage/loss reactions are monitored by the convoy controller and can halt the remaining group according to the selected mode.
 
