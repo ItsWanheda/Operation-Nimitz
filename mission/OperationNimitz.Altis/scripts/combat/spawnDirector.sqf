@@ -156,8 +156,9 @@ private _convoyRecords = [];
         }) isEqualTo -1
     };
     private _routeLongEnough = (count _routeMarkers) >= (count _resolvedClasses);
+    private _waypointRouteMarkers = _routeMarkers select [1];
     private _escortValid = _escortCount >= 0 && { _escortCount <= count _resolvedClasses };
-    private _checkpointsValid = (_checkpointMarkers findIf { !(_x in _routeMarkers) }) isEqualTo -1;
+    private _checkpointsValid = (_checkpointMarkers findIf { !(_x in _waypointRouteMarkers) }) isEqualTo -1;
     private _reactionValid = _reactionMode in ["CONTINUE", "HALT_ON_DAMAGE", "HALT_ON_LOSS"];
     private _speedValid = _speedMode in ["LIMITED", "NORMAL", "FULL"];
     private _behaviourValid = _behaviour in ["SAFE", "AWARE", "COMBAT", "STEALTH"];
@@ -241,7 +242,7 @@ private _convoyRecords = [];
                         _checkpointPauseSeconds
                     ];
                 };
-            } forEach (_routeMarkers select [1]);
+            } forEach _waypointRouteMarkers;
 
             private _cycle = _convoyGroup addWaypoint [getMarkerPos (_routeMarkers select 0), 0];
             _cycle setWaypointType "CYCLE";
