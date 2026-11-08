@@ -80,7 +80,7 @@ _aircraft addAction [
 
         ["ON_task_taxi", "SUCCEEDED"] call ON_fnc_setTaskState;
         ["IN_FLIGHT"] call ON_fnc_setPhase;
-        ["ON_task_cas", "Join JOKER 1-2 if available and proceed to the assigned close air support area. Identify targets, apply ROE, and assess effects before reporting the area clear.", getMarkerPos _marker] call ON_fnc_createTask;
+        ["ON_task_cas", "Close Air Support", "Join JOKER 1-2 if available and proceed to the assigned close air support area. Identify targets, apply ROE, and assess effects before reporting the area clear.", getMarkerPos _marker] call ON_fnc_createTask;
         ["NIMITZ", "Launch confirmed. JOKER 1-1, proceed to the assigned CAS area."] call ON_fnc_message;
 
         [] execVM "scripts\ai\wingmanController.sqf";
