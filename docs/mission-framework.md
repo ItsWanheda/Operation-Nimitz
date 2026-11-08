@@ -28,7 +28,7 @@ Assign these variable names in Eden's object attributes:
 | Player unit | `JOKER_1_1` | Player slot; assign player control in Eden |
 | Player's parked F/A-18E | `ON_playerAircraft` | Aircraft used for flight progression actions |
 | Carrier object | `ON_carrier` | Recovery proximity reference and debrief action |
-| AI wingman aircraft/unit | `ON_wingman` | Reserved for future wingman AI controller |
+| AI wingman pilot unit | `ON_wingman` | AI pilot unit reference used by the join-up controller; assign the crew unit, not the aircraft vehicle |
 | CAP marker | `ON_mrk_CAP` | Center of CAP station; create an Eden marker |
 
 **Do not guess classnames.** Select the aircraft, carrier, and unit assets from the installed editor lists after confirming the Workshop mods load. The F/A-18E, USMC 2026, and USS Nimitz Workshop references are recorded in the root README/checklist. The USS Nimitz listing currently has availability/compatibility warnings, so the carrier remains a hard setup dependency to resolve.
@@ -40,9 +40,10 @@ Assign these variable names in Eden's object attributes:
 3. After completing the aircraft inspection, player uses **Report preflight inspection complete**.
 4. Player performs the actual mod-supported engine-start procedure, then uses **Report engine start and checks complete**.
 5. Player physically completes taxi and launch using the selected carrier/aircraft mod procedures, then uses **Report taxi and launch complete**.
-5. The mission tracks entry into the CAP marker radius while airborne and requires 120 seconds on station (configurable).
-6. The mission assigns RTB and monitors for a grounded aircraft within 250 metres of the carrier at less than 25 km/h.
-7. A debrief interaction is added to the carrier object.
+5. On launch, the AI wingman controller issues a join-up/follow order if `ON_wingman` is configured and alive.
+6. The mission tracks entry into the CAP marker radius while airborne and requires 120 seconds on station (configurable).
+7. The mission assigns RTB and monitors for a grounded aircraft within 250 metres of the carrier at less than 25 km/h.
+8. A debrief interaction is added to the carrier object.
 
 The flight-deck actions are **player-confirmation gates**, not simulated aircraft systems. The CAP/recovery checks are basic mission logic, not a radar, catapult, arresting-wire, or naval aviation systems simulation.
 
