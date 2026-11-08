@@ -163,6 +163,43 @@ missionNamespace setVariable ["ON_assetDeployments", [
 ]];
 
 /*
+    TACTICAL FORCE PACKAGES — OPTIONAL GROUP-LEVEL AI SYSTEM
+
+    Row format:
+      [id, side, [unitClassnameKey, ...], spawnMarker, behavior,
+       [waypointMarker, ...], activationMarker, activationRadius]
+
+    GARRISON: spawns immediately and holds the position.
+    PATROL: spawns immediately and cycles through 2+ waypoint markers.
+    QRF: stays unspawned until the player enters activationRadius of the
+         activationMarker; then spawns at spawnMarker and moves to its route.
+
+    Every unit classname key and marker is still selected by you.
+    Leave the list empty until you are ready to configure group packages.
+*/
+missionNamespace setVariable ["ON_forcePackages", [
+    /*
+    // Example: a four-person AFR garrison at a manually selected location.
+    ["AFR_OUTPOST_NORTH", east,
+        ["AFR_RIFLEMAN", "AFR_RIFLEMAN", "AFR_MG", "AFR_AT"],
+        "ON_SPAWN_AFR_OUTPOST_NORTH", "GARRISON", [], "", 0],
+
+    // Example: a mobile patrol that cycles through three separate map markers.
+    ["AFR_PATROL_EAST", east,
+        ["AFR_RIFLEMAN", "AFR_RIFLEMAN", "AFR_MG"],
+        "ON_SPAWN_AFR_PATROL_EAST", "PATROL",
+        ["ON_PATROL_EAST_01", "ON_PATROL_EAST_02", "ON_PATROL_EAST_03"], "", 0],
+
+    // Example: QRF stays dormant until the player approaches the trigger area.
+    ["AFR_QRF_CENTRAL", east,
+        ["AFR_RIFLEMAN", "AFR_RIFLEMAN", "AFR_AT", "AFR_MG"],
+        "ON_SPAWN_AFR_QRF_BASE", "QRF",
+        ["ON_QRF_ROUTE_01", "ON_QRF_ROUTE_02"],
+        "ON_QRF_ACTIVATION", 1800]
+    */
+]];
+
+/*
     CONVOY CONFIGURATION.
     Each convoy vehicle starts at the corresponding route marker. The group
     then follows the remaining markers in order and loops back to the first.
