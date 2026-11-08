@@ -8,7 +8,7 @@ This commit starts the actual SQF mission system. It provides a single-player mi
 ## What is implemented
 
 - Mission metadata and SQF bootstrap.
-- Mission phases: `BRIEFING`, `PREFLIGHT`, `STARTUP`, `IN_FLIGHT`, `RTB`, `DEBRIEF`, `COMPLETE`.
+- Mission phases: `BRIEFING`, `PREFLIGHT`, `STARTUP`, `TAXI`, `IN_FLIGHT`, `RTB`, `DEBRIEF`, `COMPLETE`.
 - Shared diagnostic logging, radio-style message, task creation, and task-state helpers.
 - Diary briefing and initial briefing task.
 - Aircraft actions that record the player's confirmation of preflight, startup, and launch progression.
@@ -36,9 +36,10 @@ Assign these variable names in Eden's object attributes:
 ## How the current flow works
 
 1. Player starts in the ready-room location selected in Eden.
-2. Player walks to the parked aircraft and uses **Report preflight inspection complete**.
-3. After performing the actual mod-supported startup procedure, player uses **Report engine start and checks complete**.
-4. After physically completing taxi and launch using the selected carrier/aircraft mod procedures, player uses **Report taxi and launch complete**.
+2. Player walks to the parked aircraft and uses **Begin preflight inspection**.
+3. After completing the aircraft inspection, player uses **Report preflight inspection complete**.
+4. Player performs the actual mod-supported engine-start procedure, then uses **Report engine start and checks complete**.
+5. Player physically completes taxi and launch using the selected carrier/aircraft mod procedures, then uses **Report taxi and launch complete**.
 5. The mission tracks entry into the CAP marker radius while airborne and requires 120 seconds on station (configurable).
 6. The mission assigns RTB and monitors for a grounded aircraft within 250 metres of the carrier at less than 25 km/h.
 7. A debrief interaction is added to the carrier object.
@@ -59,6 +60,7 @@ The first build intentionally uses short on-screen messages rather than requirin
 
 - [ ] Build and validate an Eden `mission.sqm` after verifying the exact installed assets.
 - [ ] Confirm the aircraft object/action behavior with the F/A-18E mod; make actions available at the intended ready-room/flight-deck positions.
+- [ ] Add and verify the Eden-generated mission.sqm and required editor object references.
 - [ ] Implement a proper player/wingman join-up controller using verified unit references and AI behavior.
 - [ ] Replace player-reported startup/taxi/launch gates with real mod-supported interactions where available.
 - [ ] Validate the CAP marker and on-station condition in-game.
