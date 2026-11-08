@@ -22,6 +22,10 @@ The repository is initialized. Mission requirements, dependency references, asse
 | USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified; required assets and classnames pending in-game verification |
 | USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) | Identified; Steam listing currently shows removed/incompatible notices; installability and compatibility pending verification |
 
+## Mission framework status
+
+The first SQF foundation is under development on [`feat/mission-system-foundation`](https://github.com/ItsWanheda/Operation-Nimitz/tree/feat/mission-system-foundation). It includes the initial briefing, mission phase/task helpers, player-confirmed flight-deck gates, CAP station timer, recovery check, contact-state scaffold, and debrief. It is **not yet a playable/exported mission**: an Eden-generated `mission.sqm`, verified editor assets/classnames, and in-game testing are still required. See [Mission Framework Foundation](docs/mission-framework.md).
+
 ## Development approach
 
 Mission work will be developed incrementally in Eden Editor with modular SQF, explicit task/trigger flow, and repeatable single-player testing. Changes should be developed on feature branches and reviewed before integration.
