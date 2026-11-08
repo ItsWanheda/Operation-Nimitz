@@ -15,12 +15,12 @@ player createDiaryRecord ["Diary", [
 
 player createDiaryRecord ["Diary", [
     "Situation",
-    "VFA-103 Jolly Rogers is operating from a carrier in the Altis theatre. JOKER 1-1 is assigned a single-player Combat Air Patrol with AI support elements planned. Exact threat intelligence and supporting-unit capabilities remain subject to mission implementation and in-game verification."
+    "VFA-103 Jolly Rogers is operating from a carrier in the Altis theatre. JOKER 1-1 is assigned a single-player Close Air Support mission with AI support elements planned. Exact threat intelligence and supporting-unit capabilities remain subject to mission implementation and in-game verification."
 ]];
 
 player createDiaryRecord ["Diary", [
     "Mission",
-    "Conduct the ready-room brief, inspect and prepare the assigned F/A-18E, complete the verified startup and launch procedure, join the flight, establish the CAP station, respond to authorized tasking, and recover to the carrier."
+    "Conduct the ready-room brief, inspect and prepare the assigned two-seat F/A-18F, complete the verified startup and launch procedure, join the flight, proceed to the assigned CAS area, identify and service verified hostile ground targets under ROE, and recover to the carrier."
 ]];
 
 ["ON_task_briefing", "Review mission briefing", "Review the situation, route, communications plan, and rules of engagement. Then proceed to your assigned aircraft.", objNull] call ON_fnc_createTask;
