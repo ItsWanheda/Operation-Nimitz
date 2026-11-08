@@ -53,12 +53,39 @@ ON_fnc_reinforcementAlertRank = {
         ["_waveInterval", 60, [0]]
     ];
 
+    private _triggerValueValid = switch (_triggerType) do {
+        case "ALERT_LEVEL": {
+            _triggerValue isEqualType ""
+            && { _triggerValue in ["SUSPICIOUS", "ALERTED", "ENGAGED"] }
+        };
+        case "PHASE": {
+            _triggerValue isEqualType ""
+            && { _triggerValue in ["BRIEFING", "PREFLIGHT", "STARTUP", "TAXI", "IN_FLIGHT", "RTB", "DEBRIEF"] }
+        };
+        case "PLAYER_RADIUS": {
+            _triggerValue isEqualType []
+            && { (count _triggerValue) >= 2 }
+            && { (_triggerValue select 0) in allMapMarkers }
+            && { (_triggerValue select 1) isEqualType 0 }
+            && { (_triggerValue select 1) > 0 }
+        };
+        default { false };
+    };
+
+    private _scheduleValid = (
+        _initialDelay >= 0
+        && { _waveInterval >= 0 }
+        && { _maxWaves >= 1 }
+        && { _maxWaves isEqualTo floor _maxWaves }
+    );
+
     if (
         _id isEqualTo ""
         || { _classKeys isEqualTo [] }
         || { !(_spawnMarker in allMapMarkers) }
+        || { !_triggerValueValid }
         || { !(_triggerType in ["ALERT_LEVEL", "PHASE", "PLAYER_RADIUS"]) }
-        || { _maxWaves < 1 }
+        || { !_scheduleValid }
     ) then {
         [format ["Reinforcement definition rejected due to invalid ID, class list, spawn marker, trigger, or wave count: %1.", _id]] call ON_fnc_log;
         _status set [_id, ["INVALID", 0, _maxWaves]];
@@ -67,20 +94,7 @@ ON_fnc_reinforcementAlertRank = {
             [format ["Reinforcement '%1' rejected: a route marker is missing.", _id]] call ON_fnc_log;
             _status set [_id, ["INVALID", 0, _maxWaves]];
         } else {
-            if (
-                _triggerType isEqualTo "PLAYER_RADIUS"
-                && {
-                    !(_triggerValue isEqualType [])
-                    || { (count _triggerValue) < 2 }
-                    || { !((_triggerValue select 0) in allMapMarkers) }
-                    || { !((_triggerValue select 1) isEqualType 0) }
-                    || { (_triggerValue select 1) <= 0 }
-                }
-            ) then {
-                [format ["Reinforcement '%1' rejected: PLAYER_RADIUS requires [existingMarker, radius].", _id]] call ON_fnc_log;
-                _status set [_id, ["INVALID", 0, _maxWaves]];
-            } else {
-                _status set [_id, ["STANDBY", 0, _maxWaves]];
+            _status set [_id, ["STANDBY", 0, _maxWaves]];
 
                 [_definition] spawn {
                     params ["_row"];
@@ -174,7 +188,6 @@ ON_fnc_reinforcementAlertRank = {
                     _stateMap set [_reinforcementId, _finalStatus];
                     [format ["Reinforcement schedule '%1' completed.", _reinforcementId]] call ON_fnc_recordEvent;
                 };
-            };
         };
     };
 } forEach _definitions;
