@@ -20,14 +20,14 @@ Open `config/assetConfig.sqf` and replace the empty string for each asset you wa
 
 The file contains separate keys for:
 
-- USS Nimitz, player F/A-18F, wingman F/A-18F and wingman pilot.
+- Playable player unit (validated against the Eden player entity), USS Nimitz, player F/A-18F, wingman F/A-18F and wingman pilot.
 - AWACS aircraft/pilot, tanker aircraft/pilot and deck crew.
 - USMC infantry roles, cars, APCs, IFVs, tanks, AA, artillery, mortars, static weapons, helicopters and aircraft.
 - AFR infantry roles, cars, APCs, IFVs, tanks, AA, artillery, mortars, static weapons, helicopters and aircraft.
 - Convoy trucks, escort cars/APCs and convoy tanks.
 - Custom slots that you can rename or extend.
 
-Use the **class name**, not the editor display name. Classnames are case-sensitive in practice and must exist in the installed `CfgVehicles` config. Blank values are disabled. The mission does not guess or silently substitute another mod asset.
+The `PLAYER_UNIT` key is checked against the playable Eden unit; select the matching playable unit class in Eden because ARMA defines the player entity in `mission.sqm`. Use the **class name**, not the editor display name. Classnames are case-sensitive in practice and must exist in the installed `CfgVehicles` config. Blank values are disabled. The mission does not guess or silently substitute another mod asset.
 
 ## 2. Add the map markers
 
