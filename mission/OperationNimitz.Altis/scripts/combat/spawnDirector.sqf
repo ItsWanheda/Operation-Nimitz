@@ -37,7 +37,7 @@ private _definitions = missionNamespace getVariable ["ON_enemySpawnDefinitions",
         ["_role", "", [""]],
         ["_marker", "", [""]],
         ["_class", "", [""]],
-        ["_side", east, [sideUnknown, east, west, independent, civilian]]
+        ["_side", east]
     ];
 
     if !(_role in ["AA", "ARMOR", "ARTILLERY"]) then {
@@ -82,7 +82,7 @@ private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
 
         {
             private _class = _x;
-            private _spawnMarker = _validRoute select 0;
+            private _spawnMarker = _validRoute select (_forEachIndex mod (count _validRoute));
             if (_class isEqualTo "" || { !isClass (configFile >> "CfgVehicles" >> _class) }) then {
                 [format ["Convoy '%1' skipped invalid vehicle classname '%2'.", _convoyId, _class]] call ON_fnc_log;
             } else {
