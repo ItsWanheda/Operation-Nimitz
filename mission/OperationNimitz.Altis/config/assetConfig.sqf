@@ -209,7 +209,6 @@ missionNamespace setVariable ["ON_forcePackages", [
 */
 missionNamespace setVariable ["ON_enemyAlertSettings", createHashMapFromArray [
     ["enabled", true],
-    ["side", east],
     ["suspiciousKnowledge", 1.5],
     ["alertedKnowledge", 2.5],
     ["engagedKnowledge", 3.5],
