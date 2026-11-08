@@ -129,13 +129,21 @@ if (_expectedPlayerClass isNotEqualTo "") then {
 // -----------------------------------------------------------------------------
 private _convoys = missionNamespace getVariable ["ON_convoyDefinitions", []];
 private _usedRouteMarkers = [];
+private _convoyRecords = [];
 
 {
     _x params [
         ["_convoyId", "", [""]],
         ["_classKeys", [], [[]]],
         ["_routeMarkers", [], [[]]],
-        ["_side", east]
+        ["_side", east],
+        ["_escortCount", 0, [0]],
+        ["_checkpointMarkers", [], [[]]],
+        ["_checkpointPauseSeconds", 0, [0]],
+        ["_reactionMode", "CONTINUE", [""]],
+        ["_damageThreshold", 0.5, [0]],
+        ["_speedMode", "LIMITED", [""]],
+        ["_behaviour", "SAFE", [""]]
     ];
 
     private _resolvedClasses = _classKeys apply { _classMap getOrDefault [_x, ""] };
@@ -148,6 +156,13 @@ private _usedRouteMarkers = [];
         }) isEqualTo -1
     };
     private _routeLongEnough = (count _routeMarkers) >= (count _resolvedClasses);
+    private _escortValid = _escortCount >= 0 && { _escortCount <= count _resolvedClasses };
+    private _checkpointsValid = (_checkpointMarkers findIf { !(_x in _routeMarkers) }) isEqualTo -1;
+    private _reactionValid = _reactionMode in ["CONTINUE", "HALT_ON_DAMAGE", "HALT_ON_LOSS"];
+    private _speedValid = _speedMode in ["LIMITED", "NORMAL", "FULL"];
+    private _behaviourValid = _behaviour in ["SAFE", "AWARE", "COMBAT", "STEALTH"];
+    private _thresholdValid = _damageThreshold >= 0 && { _damageThreshold <= 1 };
+    private _pauseValid = _checkpointPauseSeconds >= 0;
 
     if (
         _convoyId isEqualTo ""
@@ -156,19 +171,28 @@ private _usedRouteMarkers = [];
         || { !_markersUnique }
         || { !_routeUnused }
         || { !_routeLongEnough }
+        || { !_escortValid }
+        || { !_checkpointsValid }
+        || { !_reactionValid }
+        || { !_speedValid }
+        || { !_behaviourValid }
+        || { !_thresholdValid }
+        || { !_pauseValid }
     ) then {
         [format [
-            "Convoy '%1' skipped. Check classname keys, valid CfgVehicles classnames, and a unique existing route with at least one marker per vehicle.",
+            "Convoy '%1' skipped. Check classname keys, route/spawn markers, escort count, checkpoint subset, reaction mode, speed/behaviour, and damage threshold.",
             _convoyId
         ]] call ON_fnc_log;
     } else {
         _usedRouteMarkers append _routeMarkers;
         private _convoyGroup = createGroup [_side, true];
         private _convoyVehicles = [];
+        private _escortStartIndex = (count _resolvedClasses) - _escortCount;
 
         {
             private _className = _x;
-            private _spawnMarker = _routeMarkers select _forEachIndex;
+            private _vehicleIndex = _forEachIndex;
+            private _spawnMarker = _routeMarkers select _vehicleIndex;
             private _vehicle = createVehicle [_className, getMarkerPos _spawnMarker, [], 0, "NONE"];
 
             if (!isNull _vehicle) then {
@@ -176,33 +200,66 @@ private _usedRouteMarkers = [];
                 createVehicleCrew _vehicle;
                 (crew _vehicle) joinSilent _convoyGroup;
                 _vehicle setVariable ["ON_convoyId", _convoyId, true];
-                _vehicle setVariable ["ON_assetClassKey", _classKeys select _forEachIndex, true];
+                _vehicle setVariable ["ON_assetClassKey", _classKeys select _vehicleIndex, true];
                 _vehicle setVariable ["ON_assetSpawnMarker", _spawnMarker, true];
+                _vehicle setVariable [
+                    "ON_convoyRole",
+                    if (_escortCount > 0 && { _vehicleIndex >= _escortStartIndex }) then { "ESCORT" } else { "TRANSPORT" },
+                    true
+                ];
                 _convoyVehicles pushBack _vehicle;
                 _spawnedAssets pushBack _vehicle;
             };
         } forEach _resolvedClasses;
 
         if ((count _convoyVehicles) isEqualTo (count _resolvedClasses)) then {
+            _convoyGroup setVariable ["ON_convoyId", _convoyId, true];
+            _convoyGroup setFormation (if (_escortCount > 0) then { "COLUMN" } else { "FILE" });
+            _convoyGroup setBehaviour _behaviour;
+            _convoyGroup setCombatMode "YELLOW";
+            _convoyGroup setSpeedMode _speedMode;
+
             {
-                private _waypoint = _convoyGroup addWaypoint [getMarkerPos _x, 0];
+                private _routeMarker = _x;
+                private _waypoint = _convoyGroup addWaypoint [getMarkerPos _routeMarker, 0];
                 _waypoint setWaypointType "MOVE";
-                _waypoint setWaypointSpeed "LIMITED";
-                _waypoint setWaypointBehaviour "SAFE";
+                _waypoint setWaypointSpeed _speedMode;
+                _waypoint setWaypointBehaviour _behaviour;
                 _waypoint setWaypointCompletionRadius 20;
+
+                if (_routeMarker in _checkpointMarkers && { _checkpointPauseSeconds > 0 }) then {
+                    _waypoint setWaypointTimeout [
+                        _checkpointPauseSeconds,
+                        _checkpointPauseSeconds,
+                        _checkpointPauseSeconds
+                    ];
+                };
             } forEach (_routeMarkers select [1]);
 
             private _cycle = _convoyGroup addWaypoint [getMarkerPos (_routeMarkers select 0), 0];
             _cycle setWaypointType "CYCLE";
-            _convoyGroup setBehaviour "SAFE";
-            _convoyGroup setSpeedMode "LIMITED";
-            _convoyGroup setVariable ["ON_convoyId", _convoyId, true];
 
+            _convoyRecords pushBack [
+                _convoyId,
+                _convoyVehicles,
+                _convoyGroup,
+                _reactionMode,
+                _damageThreshold,
+                _checkpointMarkers,
+                _checkpointPauseSeconds,
+                _speedMode,
+                _behaviour
+            ];
+
+            private _escortVehicles = { (_x getVariable ["ON_convoyRole", ""]) isEqualTo "ESCORT" } count _convoyVehicles;
             [format [
-                "Convoy '%1' spawned with %2 vehicle(s). Route: %3.",
+                "Convoy '%1' spawned with %2 vehicle(s), %3 escort(s). Route: %4. Checkpoints: %5. Reaction: %6.",
                 _convoyId,
                 count _convoyVehicles,
-                _routeMarkers joinString ", "
+                _escortVehicles,
+                _routeMarkers joinString ", ",
+                _checkpointMarkers joinString ", ",
+                _reactionMode
             ]] call ON_fnc_recordEvent;
         } else {
             {
@@ -213,6 +270,9 @@ private _usedRouteMarkers = [];
         };
     };
 } forEach _convoys;
+
+missionNamespace setVariable ["ON_convoyRecords", _convoyRecords];
+missionNamespace setVariable ["ON_convoyDirectorReady", true];
 
 if (isNull (missionNamespace getVariable ["ON_atc", objNull])) then {
     missionNamespace setVariable ["ON_atc", missionNamespace getVariable ["ON_carrier", objNull]];
