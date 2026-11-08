@@ -1,0 +1,6 @@
+author = "ItsWanheda";
+onLoadName = "Operation Nimitz";
+onLoadMission = "VFA-103 Jolly Rogers | Single-player carrier CAP";
+overviewText = "A full-MILSIM naval aviation sortie from the USS Nimitz in the Altis theatre.";
+overviewPicture = "";
+loadScreen = "";
