@@ -37,7 +37,7 @@ _playerAircraft addAction [
 
         ["IDENTIFIED"] call ON_fnc_setContactStatus;
         ["ON_task_contact", "SUCCEEDED"] call ON_fnc_setTaskState;
-        ["ON_task_contact_roe", "Review the contact and apply the briefed rules of engagement. Declare hostile only when the configured contact is verified hostile.", _contactTarget] call ON_fnc_createTask;
+        ["ON_task_contact_roe", "Contact classification and ROE", "Review the contact and apply the briefed rules of engagement. Declare hostile only when the configured contact is verified hostile.", _contactTarget] call ON_fnc_createTask;
         ["AWACS", "JOKER 1-1, contact identification reported. Confirm classification under the briefed ROE."] call ON_fnc_message;
     },
     nil, 1.5, true, true, "",
@@ -58,7 +58,7 @@ _playerAircraft addAction [
 
         ["HOSTILE_CONFIRMED"] call ON_fnc_setContactStatus;
         ["ON_task_contact_roe", "SUCCEEDED"] call ON_fnc_setTaskState;
-        ["ON_task_intercept", "Maintain the intercept and act only within the confirmed rules of engagement. No scripted weapon release is provided.", _contactTarget] call ON_fnc_createTask;
+        ["ON_task_intercept", "Intercept confirmed hostile", "Maintain the intercept and act only within the confirmed rules of engagement. No scripted weapon release is provided.", _contactTarget] call ON_fnc_createTask;
         ["JOKER 1-1", "Hostile status confirmed under the mission ROE. Weapons employment remains under player control."] call ON_fnc_message;
     },
     nil, 1.5, true, true, "",
@@ -123,7 +123,7 @@ while {
 
 if (_detected && { (missionNamespace getVariable ["ON_phase", ""]) isEqualTo "IN_FLIGHT" }) then {
     ["UNKNOWN"] call ON_fnc_setContactStatus;
-    ["ON_task_contact", "Investigate the scripted contact. Close to visual-identification range and report the classification.", _contact] call ON_fnc_createTask;
+    ["ON_task_contact", "Investigate contact", "Investigate the scripted contact. Close to visual-identification range and report the classification.", _contact] call ON_fnc_createTask;
     ["AWACS", "JOKER 1-1, scripted contact detected in the patrol area. Investigate and report identification."] call ON_fnc_message;
 };
 
