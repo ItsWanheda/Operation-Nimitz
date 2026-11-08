@@ -129,9 +129,9 @@ Create only the directories and files needed by the chosen implementation. Confi
 |---|---:|---|---|
 | F/A-18E Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, exact E-variant vehicle classname, cockpit/startup behavior, flight model, pylons, weapons, animations, sounds, and carrier compatibility |
 | USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, required units, factions, equipment, exact classnames, and compatibility with the selected mission mod set |
-| USS Nimitz carrier | Not supplied | **Pending selection** | Identify the exact Workshop item, author, dependencies, version, carrier object classname, deck features, launch/recovery support, and compatibility with the aircraft mod |
+| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) — USS Nimitz (Rory / TeTeTe3) | Identified; **installation and compatibility not verified** | Verify availability/installability, CBA_A3 dependency, carrier object classname, deck features, launch/recovery support, and compatibility with the F/A-18E mod |
 
-**Important:** The USS Nimitz Workshop dependency has not been identified. Do not invent a Workshop ID, mod title, vehicle classname, or claim that catapults/arresting gear work until the selected asset has been tested.
+**Important:** The Workshop item is now identified, but it is not yet a verified mission dependency. The Steam listing currently displays a removed-from-community notice and an ARMA 3 incompatibility warning. Its description identifies the carrier as a static, non-pilotable structure and advertises a walkable deck, four steam catapults, arresting gear, IFLOLS, hangar, elevators, and a briefing room. Treat those as **publisher-described features, not in-game test results**. The listing also names **CBA_A3** as a required item. Confirm that the item can be installed and loaded with the current game/mod set before depending on it.
 
 ### 4.2 Dependency verification checklist
 
@@ -604,8 +604,9 @@ Keep this list current. Resolve each item with evidence from the actual installe
 | F/A-18E Super Hornet 2020 exact vehicle classname | **Pending confirmation** | In-game/config inspection on the installed version |
 | F/A-18E startup, avionics, hook, catapult, and loadout capabilities | **Pending confirmation** | Repeatable tests in a disposable mission |
 | USMC 2026 required unit/faction classnames | **Pending confirmation** | In-game editor/config inspection |
-| USS Nimitz Workshop item and dependencies | **Not identified** | Select exact Workshop item and verify installation |
-| USS Nimitz deck, elevator, catapult, and arresting-gear functions | **Pending confirmation** | Isolated carrier test mission |
+| USS Nimitz Workshop item | Identified: [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417); Steam currently displays removed/incompatible notices | Confirm installability and successful load in the current ARMA 3 build |
+| USS Nimitz dependency | Listing names CBA_A3 as required | Install and test with CBA_A3 enabled |
+| USS Nimitz deck, elevator, catapult, and arresting-gear functions | Advertised by Workshop description; **not in-game verified** | Isolated carrier test mission; validate each feature with the selected F/A-18E mod |
 | AI taxi and carrier recovery capability | **Pending confirmation** | Repeatable AI tests; do not assume player functionality implies AI support |
 | AWACS aircraft/system and detection behavior | **Pending confirmation** | Select asset/system and validate actual contact behavior |
 | Tanker and refueling compatibility | **Pending confirmation** | Verify compatible assets and functional fuel transfer |
