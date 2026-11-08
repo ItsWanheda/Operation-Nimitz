@@ -1,6 +1,6 @@
 # Operation Nimitz — Mission Framework
 
-**Status:** 0.2.0-dev mission-system foundation; not yet a playable/exported mission.  
+**Status:** 0.3.0-dev mission-system foundation; not yet a playable/exported mission.  
 **Mission folder:** mission/OperationNimitz.Altis  
 **Active implementation branch:** feat/mission-system-foundation
 
