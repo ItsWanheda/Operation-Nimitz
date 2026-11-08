@@ -25,6 +25,7 @@ waitUntil {
 
 private _definitions = missionNamespace getVariable ["ON_reinforcementDefinitions", []];
 private _status = createHashMap;
+private _seenReinforcementIds = [];
 missionNamespace setVariable ["ON_reinforcementStatus", _status];
 missionNamespace setVariable ["ON_reinforcementGroups", []];
 
@@ -79,15 +80,21 @@ ON_fnc_reinforcementAlertRank = {
         && { _maxWaves isEqualTo floor _maxWaves }
     );
 
+    private _duplicateId = _id in _seenReinforcementIds;
+    if (_id isNotEqualTo "" && { !_duplicateId }) then {
+        _seenReinforcementIds pushBack _id;
+    };
+
     if (
         _id isEqualTo ""
+        || { _duplicateId }
         || { _classKeys isEqualTo [] }
         || { !(_spawnMarker in allMapMarkers) }
         || { !_triggerValueValid }
         || { !(_triggerType in ["ALERT_LEVEL", "PHASE", "PLAYER_RADIUS"]) }
         || { !_scheduleValid }
     ) then {
-        [format ["Reinforcement definition rejected due to invalid ID, class list, spawn marker, trigger, or wave count: %1.", _id]] call ON_fnc_log;
+        [format ["Reinforcement definition rejected due to empty/duplicate ID, class list, spawn marker, trigger, or wave count: %1.", _id]] call ON_fnc_log;
         _status set [_id, ["INVALID", 0, _maxWaves]];
     } else {
         if ((_waypointMarkers findIf { !(_x in allMapMarkers) }) >= 0) then {
