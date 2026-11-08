@@ -4,7 +4,7 @@
 */
 waitUntil { time > 0 && { !isNull player } };
 
-missionNamespace setVariable ["ON_version", "0.2.0-dev"];
+missionNamespace setVariable ["ON_version", "0.3.0-dev"];
 missionNamespace setVariable ["ON_phase", "BRIEFING"];
 missionNamespace setVariable ["ON_missionResult", "UNSET"];
 missionNamespace setVariable ["ON_terminalPhase", "BRIEFING"];
