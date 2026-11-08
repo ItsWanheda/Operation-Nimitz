@@ -110,7 +110,7 @@ missionNamespace setVariable ["ON_assetDeployments", [
     ["WINGMAN_F18F", "VEHICLE", "WINGMAN_F18F", "ON_SPAWN_WINGMAN_AIRCRAFT", west, false, "ON_wingmanAircraft", "", true],
     ["WINGMAN_PILOT", "UNIT", "WINGMAN_PILOT", "ON_SPAWN_WINGMAN_PILOT", west, false, "ON_wingman", "ON_wingmanAircraft", true],
 
-    // SUPPORT AIRCRAFT — optional; uncomment/fill the classnames and markers.
+    // SUPPORT AIRCRAFT — optional; fill the classname keys and create the named markers.
     ["AWACS_AIRCRAFT", "VEHICLE", "AWACS_AIRCRAFT", "ON_SPAWN_AWACS_AIRCRAFT", west, false, "ON_awacs", "", true],
     ["AWACS_PILOT", "UNIT", "AWACS_PILOT", "ON_SPAWN_AWACS_PILOT", west, false, "ON_awacsPilot", "ON_awacs", true],
     ["TANKER_AIRCRAFT", "VEHICLE", "TANKER_AIRCRAFT", "ON_SPAWN_TANKER_AIRCRAFT", west, false, "ON_tanker", "", true],
@@ -124,9 +124,14 @@ missionNamespace setVariable ["ON_assetDeployments", [
     ["USMC_MG_01", "UNIT", "USMC_MG", "ON_SPAWN_USMC_MG_01", west, false, "", "", true],
     ["USMC_CAR_01", "VEHICLE", "USMC_CAR", "ON_SPAWN_USMC_CAR_01", west, true, "", "", true],
     ["USMC_APC_01", "VEHICLE", "USMC_APC", "ON_SPAWN_USMC_APC_01", west, true, "", "", true],
+    ["USMC_IFV_01", "VEHICLE", "USMC_IFV", "ON_SPAWN_USMC_IFV_01", west, true, "", "", true],
     ["USMC_TANK_01", "VEHICLE", "USMC_TANK", "ON_SPAWN_USMC_TANK_01", west, true, "", "", true],
     ["USMC_AA_01", "VEHICLE", "USMC_AA", "ON_SPAWN_USMC_AA_01", west, true, "", "", true],
     ["USMC_ARTILLERY_01", "VEHICLE", "USMC_ARTILLERY", "ON_SPAWN_USMC_ARTILLERY_01", west, true, "", "", true],
+    ["USMC_MORTAR_01", "VEHICLE", "USMC_MORTAR", "ON_SPAWN_USMC_MORTAR_01", west, true, "", "", true],
+    ["USMC_STATIC_MG_01", "VEHICLE", "USMC_STATIC_MG", "ON_SPAWN_USMC_STATIC_MG_01", west, true, "", "", true],
+    ["USMC_STATIC_AT_01", "VEHICLE", "USMC_STATIC_AT", "ON_SPAWN_USMC_STATIC_AT_01", west, true, "", "", true],
+    ["USMC_STATIC_AA_01", "VEHICLE", "USMC_STATIC_AA", "ON_SPAWN_USMC_STATIC_AA_01", west, true, "", "", true],
     ["USMC_HELICOPTER_01", "VEHICLE", "USMC_HELICOPTER", "ON_SPAWN_USMC_HELICOPTER_01", west, true, "", "", true],
     ["USMC_AIRCRAFT_01", "VEHICLE", "USMC_AIRCRAFT", "ON_SPAWN_USMC_AIRCRAFT_01", west, true, "", "", true],
 
@@ -139,9 +144,13 @@ missionNamespace setVariable ["ON_assetDeployments", [
     ["AFR_SNIPER_01", "UNIT", "AFR_SNIPER", "ON_SPAWN_AFR_SNIPER_01", east, false, "", "", true],
     ["AFR_CAR_01", "VEHICLE", "AFR_CAR", "ON_SPAWN_AFR_CAR_01", east, true, "", "", true],
     ["AFR_APC_01", "VEHICLE", "AFR_APC", "ON_SPAWN_AFR_APC_01", east, true, "", "", true],
+    ["AFR_IFV_01", "VEHICLE", "AFR_IFV", "ON_SPAWN_AFR_IFV_01", east, true, "", "", true],
     ["AFR_TANK_01", "VEHICLE", "AFR_TANK", "ON_SPAWN_AFR_TANK_01", east, true, "", "", true],
     ["AFR_AA_01", "VEHICLE", "AFR_AA", "ON_SPAWN_AFR_AA_01", east, true, "", "", true],
     ["AFR_ARTILLERY_01", "VEHICLE", "AFR_ARTILLERY", "ON_SPAWN_AFR_ARTILLERY_01", east, true, "", "", true],
+    ["AFR_STATIC_MG_01", "VEHICLE", "AFR_STATIC_MG", "ON_SPAWN_AFR_STATIC_MG_01", east, true, "", "", true],
+    ["AFR_STATIC_AT_01", "VEHICLE", "AFR_STATIC_AT", "ON_SPAWN_AFR_STATIC_AT_01", east, true, "", "", true],
+    ["AFR_STATIC_AA_01", "VEHICLE", "AFR_STATIC_AA", "ON_SPAWN_AFR_STATIC_AA_01", east, true, "", "", true],
     ["AFR_MORTAR_01", "VEHICLE", "AFR_MORTAR", "ON_SPAWN_AFR_MORTAR_01", east, true, "", "", true],
     ["AFR_HELICOPTER_01", "VEHICLE", "AFR_HELICOPTER", "ON_SPAWN_AFR_HELICOPTER_01", east, true, "", "", true],
     ["AFR_AIRCRAFT_01", "VEHICLE", "AFR_AIRCRAFT", "ON_SPAWN_AFR_AIRCRAFT_01", east, true, "", "", true]
