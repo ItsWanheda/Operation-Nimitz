@@ -3,7 +3,7 @@
 > **Document status:** Planning baseline  
 > **Mission type:** ARMA 3, single-player, full-MILSIM naval aviation  
 > **Theatre:** Altis  
-> **Initial sortie:** Combat Air Patrol (CAP) from a carrier  
+> **Initial sortie:** Close Air Support (CAS) from a carrier  
 > **Player flight:** JOKER 1-1 / AI wingman: JOKER 1-2
 
 This checklist is the working implementation plan for Operation Nimitz. It deliberately separates confirmed project decisions from assets, classnames, and procedures that still require verification in the actual ARMA 3 installation.
@@ -30,7 +30,7 @@ Do not mark a dependency, classname, capability, or procedure complete merely be
 - [x] Simulation level: **full MILSIM**, not cinematic or simplified.
 - [x] Theatre: **Altis**.
 - [x] Friendly squadron: **VFA-103 Jolly Rogers**.
-- [x] Player aircraft: **F/A-18E Super Hornet** (single-seat E variant).
+- [x] Player aircraft: **F/A-18F Super Hornet** (two-seat F variant).
 - [x] Player callsign: **JOKER 1-1**.
 - [x] AI wingman callsign: **JOKER 1-2**.
 - [x] Initial mission: **Combat Air Patrol (CAP)**.
@@ -127,9 +127,9 @@ Create only the directories and files needed by the chosen implementation. Confi
 
 | Asset | Workshop ID | Current status | Required verification |
 |---|---:|---|---|
-| F/A-18E Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, exact E-variant vehicle classname, cockpit/startup behavior, flight model, pylons, weapons, animations, sounds, and carrier compatibility |
+| F/A-18F Super Hornet 2020 | [2131302796](https://steamcommunity.com/sharedfiles/filedetails/?id=2131302796) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, exact E-variant vehicle classname, cockpit/startup behavior, flight model, pylons, weapons, animations, sounds, and carrier compatibility |
 | USMC 2026 | [3752331810](https://steamcommunity.com/sharedfiles/filedetails/?id=3752331810) | Identified by project owner; **not yet confirmed in-game** | Installed version, prerequisites, required units, factions, equipment, exact classnames, and compatibility with the selected mission mod set |
-| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) — USS Nimitz (Rory / TeTeTe3) | Identified; **installation and compatibility not verified** | Verify availability/installability, CBA_A3 dependency, carrier object classname, deck features, launch/recovery support, and compatibility with the F/A-18E mod |
+| USS Nimitz carrier | [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417) — USS Nimitz (Rory / TeTeTe3) | Identified; **installation and compatibility not verified** | Verify availability/installability, CBA_A3 dependency, carrier object classname, deck features, launch/recovery support, and compatibility with the F/A-18F mod |
 
 **Important:** The Workshop item is now identified, but it is not yet a verified mission dependency. The Steam listing currently displays a removed-from-community notice and an ARMA 3 incompatibility warning. Its description identifies the carrier as a static, non-pilotable structure and advertises a walkable deck, four steam catapults, arresting gear, IFLOLS, hangar, elevators, and a briefing room. Treat those as **publisher-described features, not in-game test results**. The listing also names **CBA_A3** as a required item. Confirm that the item can be installed and loaded with the current game/mod set before depending on it.
 
@@ -153,7 +153,7 @@ For every required mod:
 
 ### 4.3 Aircraft-specific verification
 
-- [ ] Verify that the installed asset is specifically the **F/A-18E**, not the F/A-18F two-seat variant.
+- [ ] Verify that the installed asset is specifically the **F/A-18F**, not the F/A-18F two-seat variant.
 - [ ] Record the exact aircraft classname only after in-game verification.
 - [ ] Confirm the cockpit is usable in the player seat and check required interaction/action controls.
 - [ ] Verify startup, engine state, avionics, lights, canopy, control surfaces, and landing gear behavior actually available in this mod.
@@ -187,7 +187,7 @@ Once the USS Nimitz asset is selected:
 
 ### 5.1 Player and flight
 
-- [ ] Place the player as **JOKER 1-1** in the verified F/A-18E.
+- [ ] Place the player as **JOKER 1-1** in the verified F/A-18F.
 - [ ] Create **JOKER 1-2** as an AI-controlled wingman.
 - [ ] Decide and document wingman skill, formation, spacing, speed, altitude, radio behavior, and lost-wingman behavior.
 - [ ] Define how the player gives wingman orders and what happens if the AI cannot comply.
@@ -218,7 +218,7 @@ Once the USS Nimitz asset is selected:
 - [ ] Verify the player can navigate from the starting position to the flight deck without getting stuck or falling through geometry.
 - [ ] Provide a briefing board or equivalent readable briefing presentation.
 - [ ] Include mission date/time, weather, carrier position/heading, friendly situation, threat estimate, and mission objective.
-- [ ] Include a map with the carrier, CAP station, boundaries, navigation points, and known friendly locations.
+- [ ] Include a map with the carrier, CAS area, boundaries, navigation points, and known friendly locations.
 - [ ] Include a flight plan with route order, altitude/speed guidance, expected timing, and recovery plan.
 - [ ] Include the aircraft identity, assigned callsign, wingman, and verified loadout.
 - [ ] Include comms plan: who speaks, expected callouts, and how the player receives information.
@@ -308,7 +308,7 @@ Once the USS Nimitz asset is selected:
 
 ### 9.3 Tanker
 
-- [ ] Decide whether aerial refueling is required for the first CAP sortie or deferred to a later phase.
+- [ ] Decide whether aerial refueling is required for the first CAS sortie or deferred to a later phase.
 - [ ] Identify and verify the tanker asset and compatible refueling method.
 - [ ] Confirm aircraft/tanker compatibility and whether refueling is truly functional in the selected mods.
 - [ ] Test rendezvous, station behavior, interaction, fuel transfer, and disconnect.
@@ -324,7 +324,7 @@ Once the USS Nimitz asset is selected:
 
 ---
 
-## 10. CAP tasking and hostile-contact flow
+## 10. CAS tasking and hostile-contact flow
 
 ### 10.1 CAP station
 
@@ -531,7 +531,7 @@ Work through the phases in order. A later phase should not be treated as complet
 |---|---|---|
 | 0 — Repository and brief | Define mission baseline, source layout, naming, and test records | Requirements are written and scope is stable |
 | 1 — Mod and asset verification | Verify aircraft and USMC mods; identify/select the carrier; record classnames and capabilities | All required assets load and pass isolated tests; unsupported features are documented |
-| 2 — Carrier and player foundation | Place carrier, player start, ready room route, aircraft, and wingman | Player can move to and enter the correct F/A-18E; no critical geometry/spawn issues |
+| 2 — Carrier and player foundation | Place carrier, player start, ready room route, aircraft, and wingman | Player can move to and enter the correct F/A-18F; no critical geometry/spawn issues |
 | 3 — Flight-deck procedures | Implement and test preflight, startup, taxi, launch, and join-up | Full launch sequence is repeatable or a documented alternative is approved |
 | 4 — Mission framework | Implement initialization, phase state, tasks, triggers, communications, and briefing | Mission phases advance once and recover cleanly from expected failures |
 | 5 — CAP and supporting AI | Implement wingman, CAP station, AWACS/ATC messages, and tanker only if verified | Patrol and support flow works in single-player |
@@ -563,7 +563,7 @@ The first sortie is ready for release only when all mandatory criteria below pas
 
 ### Aircraft and flight operations
 
-- [ ] The player's aircraft is verified to be the F/A-18E variant, not the F/A-18F.
+- [ ] The player's aircraft is verified to be the F/A-18F variant, not the F/A-18F.
 - [ ] Aircraft classname, loadout, and required functions are verified in-game.
 - [ ] Preflight, startup, taxi, and launch are repeatable and do not depend on unverified features.
 - [ ] JOKER 1-2 can join and support the player, or a documented fallback is provided.
@@ -601,12 +601,12 @@ Keep this list current. Resolve each item with evidence from the actual installe
 
 | Item | Current status | Evidence required before closing |
 |---|---|---|
-| F/A-18E Super Hornet 2020 exact vehicle classname | **Pending confirmation** | In-game/config inspection on the installed version |
-| F/A-18E startup, avionics, hook, catapult, and loadout capabilities | **Pending confirmation** | Repeatable tests in a disposable mission |
+| F/A-18F Super Hornet 2020 exact vehicle classname | **Pending confirmation** | In-game/config inspection on the installed version |
+| F/A-18F startup, avionics, hook, catapult, and loadout capabilities | **Pending confirmation** | Repeatable tests in a disposable mission |
 | USMC 2026 required unit/faction classnames | **Pending confirmation** | In-game editor/config inspection |
 | USS Nimitz Workshop item | Identified: [643530417](https://steamcommunity.com/sharedfiles/filedetails/?id=643530417); Steam currently displays removed/incompatible notices | Confirm installability and successful load in the current ARMA 3 build |
 | USS Nimitz dependency | Listing names CBA_A3 as required | Install and test with CBA_A3 enabled |
-| USS Nimitz deck, elevator, catapult, and arresting-gear functions | Advertised by Workshop description; **not in-game verified** | Isolated carrier test mission; validate each feature with the selected F/A-18E mod |
+| USS Nimitz deck, elevator, catapult, and arresting-gear functions | Advertised by Workshop description; **not in-game verified** | Isolated carrier test mission; validate each feature with the selected F/A-18F mod |
 | AI taxi and carrier recovery capability | **Pending confirmation** | Repeatable AI tests; do not assume player functionality implies AI support |
 | AWACS aircraft/system and detection behavior | **Pending confirmation** | Select asset/system and validate actual contact behavior |
 | Tanker and refueling compatibility | **Pending confirmation** | Verify compatible assets and functional fuel transfer |
