@@ -1,6 +1,6 @@
 # Operation Nimitz — Eden Setup and Test Guide
 
-This guide covers the 0.3.0-dev SQF mission framework and the manual classname deployment system.
+This guide covers the 0.4.0-dev SQF mission framework and the manual classname deployment system.
 
 ## Before opening the mission
 
