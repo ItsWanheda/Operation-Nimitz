@@ -23,7 +23,7 @@ Every enemy deployment row should have its own marker and keep `requireUniqueMar
 
 - Confirm the mission loads without an SQF compile error.
 - Confirm the RPT reports configured asset spawns and no invalid classnames or missing markers.
-- Confirm the USS Nimitz object appears at its sea marker and the player F/A-18F appears at its flight-deck marker.
+- Confirm the playable Eden unit matches `PLAYER_UNIT`, the USS Nimitz object appears at its sea marker, and the player F/A-18F appears at its flight-deck marker.
 - Confirm the wingman aircraft and pilot are created and the pilot is seated in the configured aircraft.
 - Confirm optional AWACS, tanker and deck-crew references resolve when configured.
 - Confirm every infantry/vehicle deployment appears at its intended marker and on the intended side.
