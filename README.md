@@ -24,7 +24,7 @@ The repository is initialized. Mission requirements, dependency references, asse
 
 ## Mission framework status
 
-The first SQF foundation is under development on [`feat/mission-system-foundation`](https://github.com/ItsWanheda/Operation-Nimitz/tree/feat/mission-system-foundation). It includes the initial briefing, mission phase/task helpers, player-confirmed flight-deck gates, CAP station timer, recovery check, contact-state scaffold, and debrief. It is **not yet a playable/exported mission**: an Eden-generated `mission.sqm`, verified editor assets/classnames, and in-game testing are still required. See [Mission Framework Foundation](docs/mission-framework.md).
+The first SQF foundation is under development on [`feat/mission-system-foundation`](https://github.com/ItsWanheda/Operation-Nimitz/tree/feat/mission-system-foundation). It includes the initial briefing, mission phase/task helpers, player-confirmed flight-deck gates, basic AI wingman join-up order, CAP station timer, recovery check, contact-state scaffold, and debrief. It is **not yet a playable/exported mission**: an Eden-generated `mission.sqm`, verified editor assets/classnames, and in-game testing are still required. See [Mission Framework Foundation](docs/mission-framework.md).
 
 ## Development approach
 
